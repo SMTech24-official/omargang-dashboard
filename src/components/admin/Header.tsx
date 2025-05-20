@@ -7,7 +7,7 @@ const Header = () => {
   const { data, isLoading } = useMyProfileQuery("");
 
   return (
-    <div className="flex items-center justify-between  bg-white p-4">
+    <div className="flex justify-between">
       <h2 className="text-xl font-semibold">Overview</h2>
       <div className="flex items-center gap-2">
         <button className="rounded-full p-2 text-gray-500 hover:bg-gray-100">

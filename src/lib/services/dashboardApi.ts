@@ -18,7 +18,8 @@ const dashboardApi = baseApi.injectEndpoints({
     }),
 
     topSelling: builder.query({
-      query: () => "/admin/top-selling",
+      query: ({ foodType = "", startDate = "", endDate = "" }) =>
+        `/admin/top-selling?foodType=${foodType}&endDate=${endDate}&startDate=${startDate}`,
       providesTags: ["topSelling"],
     }),
   }),
@@ -28,5 +29,5 @@ export const {
   useDashboardSummeryQuery,
   useSalesReportQuery,
   useSpecialFoodsQuery,
-  useTopSellingQuery
+  useTopSellingQuery,
 } = dashboardApi;

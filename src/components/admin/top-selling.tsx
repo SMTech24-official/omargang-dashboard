@@ -1,33 +1,6 @@
-import Image from "next/image"
+import Image from "next/image";
 
-export default function TopSellingTable() {
-  const products = [
-    {
-      id: "APR12987",
-      name: "Vegetarian Noodle",
-      category: "Noodles",
-      sells: 4863,
-      revenue: "$47,500",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: "SHO8765",
-      name: "Pizza Hut Luminu",
-      category: "Pizza",
-      sells: 1124,
-      revenue: "$12,650",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: "TSH9987",
-      name: "Mozzarella Cheese",
-      category: "Berger",
-      sells: 1675,
-      revenue: "$13,540",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-  ]
-
+export default function TopSellingTable(topSelingData: any) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -41,9 +14,9 @@ export default function TopSellingTable() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="border-b">
-              <td className="py-3 text-sm">{product.id}</td>
+          {topSelingData?.topSelingData?.result?.map((product: any) => (
+            <tr key={product.foodId} className="border-b">
+              <td className="py-3 text-sm">{product.foodId}</td>
               <td className="py-3">
                 <div className="flex items-center gap-2">
                   <div className="h-10 w-10 overflow-hidden rounded-md border">
@@ -58,7 +31,7 @@ export default function TopSellingTable() {
                   <span className="text-sm font-medium">{product.name}</span>
                 </div>
               </td>
-              <td className="py-3 text-sm">{product.category}</td>
+              <td className="py-3 text-sm">{product.foodType}</td>
               <td className="py-3 text-sm">{product.sells}</td>
               <td className="py-3 text-sm">{product.revenue}</td>
             </tr>
@@ -66,5 +39,5 @@ export default function TopSellingTable() {
         </tbody>
       </table>
     </div>
-  )
+  );
 }

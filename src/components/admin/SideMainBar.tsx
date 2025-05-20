@@ -2,9 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 import { usePathname } from "next/navigation";
-import Sidebar from "../seller/Sidebar";
 import SideNav from "./Sidebar";
-
 
 const SideMainBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -29,18 +27,11 @@ const SideMainBar = () => {
   }, []);
 
   return (
-    <div
-      className={`  h-full  ${
-        pathName == "/privacy-policy" ? "hidden" : "block"
-      }`}
-    >
-     
+    <div className={`${pathName == "/privacy-policy" ? "hidden" : "block"}`}>
       <SideNav
         isOpen={isSidebarOpen}
         toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
       ></SideNav>
-
-     
     </div>
   );
 };

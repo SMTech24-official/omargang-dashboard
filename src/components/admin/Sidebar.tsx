@@ -75,7 +75,7 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
   };
 
   return (
-    <div className="w-80 h-screen bg-white flex flex-col justify-between fixed">
+    <div className="w-80 h-screen bg-white flex flex-col justify-between">
       {/* Header Logo */}
       <div className="p-4">
         <div className="flex items-center gap-2">
