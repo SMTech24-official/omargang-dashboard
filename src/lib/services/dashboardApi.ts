@@ -22,6 +22,11 @@ const dashboardApi = baseApi.injectEndpoints({
         `/admin/top-selling?foodType=${foodType}&endDate=${endDate}&startDate=${startDate}`,
       providesTags: ["topSelling"],
     }),
+
+    foodLists: builder.query({
+      query: ({ page }) => `/food?limit=10&page=${page}`,
+      providesTags: ["foodLists"],
+    }),
   }),
 });
 
@@ -30,4 +35,5 @@ export const {
   useSalesReportQuery,
   useSpecialFoodsQuery,
   useTopSellingQuery,
+  useFoodListsQuery,
 } = dashboardApi;

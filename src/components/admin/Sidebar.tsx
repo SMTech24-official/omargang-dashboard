@@ -33,7 +33,7 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
     },
     {
       id: "stores",
-      label: "Stores/Restaurants",
+      label: "Stores/Food",
       route: "/admin/store",
       icon: Store,
     },

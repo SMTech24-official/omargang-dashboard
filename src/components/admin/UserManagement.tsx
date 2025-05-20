@@ -1,5 +1,5 @@
-import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Sample user data
 const users = [
@@ -83,11 +83,11 @@ const users = [
     role: "Store Owner",
     image: "/placeholder.svg?height=40&width=40",
   },
-]
+];
 
 export default function UserManagement() {
   return (
-    <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="container mx-auto p-6 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">User Management</h1>
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -99,16 +99,29 @@ export default function UserManagement() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Name</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Email</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Contact Info</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Role</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Status</th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Name
+                </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Email
+                </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Contact Info
+                </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Role
+                </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Status
+                </th>
               </tr>
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.id} className="border-b border-gray-200 last:border-0">
+                <tr
+                  key={user.id}
+                  className="border-b border-gray-200 last:border-0"
+                >
                   <td className="py-4 px-6">
                     <div className="flex items-center">
                       <div className="h-10 w-10 rounded-full overflow-hidden mr-3 bg-gray-100">
@@ -123,9 +136,15 @@ export default function UserManagement() {
                       <span className="font-medium">{user.name}</span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-sm text-gray-600">{user.email}</td>
-                  <td className="py-4 px-6 text-sm text-gray-600">{user.phone}</td>
-                  <td className="py-4 px-6 text-sm text-gray-600">{user.role}</td>
+                  <td className="py-4 px-6 text-sm text-gray-600">
+                    {user.email}
+                  </td>
+                  <td className="py-4 px-6 text-sm text-gray-600">
+                    {user.phone}
+                  </td>
+                  <td className="py-4 px-6 text-sm text-gray-600">
+                    {user.role}
+                  </td>
                   <td className="py-4 px-6">
                     <div className="flex space-x-2">
                       <button className="px-3 py-1 bg-amber-50 text-amber-600 rounded text-xs hover:bg-amber-100 transition-colors">
@@ -158,7 +177,9 @@ export default function UserManagement() {
             <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
               3
             </button>
-            <span className="h-8 w-8 flex items-center justify-center">...</span>
+            <span className="h-8 w-8 flex items-center justify-center">
+              ...
+            </span>
             <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
               440
             </button>
@@ -170,5 +191,5 @@ export default function UserManagement() {
         </div>
       </div>
     </div>
-  )
+  );
 }
