@@ -1,4 +1,4 @@
-import OrderManagementTable from "@/components/admin/OrderManagementTable";
+import OrderManagementTable from "@/components/admin/OrderManagement";
 import React from "react";
 
 const OrderPage = () => {

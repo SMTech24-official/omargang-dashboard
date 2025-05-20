@@ -1,26 +1,21 @@
-import FoodCard from "@/components/admin/food-cart"
-import ResourceCard from "@/components/admin/resource-cart"
-import SalesChart from "@/components/admin/sales-chart"
+import FoodCard from "@/components/admin/food-cart";
+import ResourceCard from "@/components/admin/resource-cart";
+import SalesChart from "@/components/admin/sales-chart";
 
-import StatCard from "@/components/admin/stat-cart"
-import TopSellingTable from "@/components/admin/top-selling"
-import { BarChart, RefreshCw, Users } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
+import StatCard from "@/components/admin/stat-cart";
+import TopSellingTable from "@/components/admin/top-selling";
+import { BarChart, Users } from "lucide-react";
 
+import Link from "next/link";
 
 export default function Dashboard() {
   return (
     <div className=" bg-gray-50">
-     
-
       <main className=" w-full">
         {/* <div className="p-4">
           <h1 className="text-xl font-medium text-gray-500">Dashboard</h1>
         </div> */}
         <div className="">
-        
-
           <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-4">
             <StatCard
               title="Total Stores/Restaurants"
@@ -78,7 +73,10 @@ export default function Dashboard() {
             <div className="rounded-lg border bg-white p-4 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Special Food</h3>
-                <Link href="#" className="text-sm text-gray-500 hover:underline">
+                <Link
+                  href="#"
+                  className="text-sm text-gray-500 hover:underline"
+                >
                   View All
                 </Link>
               </div>
@@ -134,7 +132,14 @@ export default function Dashboard() {
                         strokeLinejoin="round"
                         className="lucide lucide-calendar"
                       >
-                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                        <rect
+                          width="18"
+                          height="18"
+                          x="3"
+                          y="4"
+                          rx="2"
+                          ry="2"
+                        />
                         <line x1="16" x2="16" y1="2" y2="6" />
                         <line x1="8" x2="8" y1="2" y2="6" />
                         <line x1="3" x2="21" y1="10" y2="10" />
@@ -150,7 +155,10 @@ export default function Dashboard() {
             <div className="rounded-lg border bg-white p-4 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Educational resources</h3>
-                <Link href="#" className="text-sm text-gray-500 hover:underline">
+                <Link
+                  href="#"
+                  className="text-sm text-gray-500 hover:underline"
+                >
                   View All
                 </Link>
               </div>
@@ -176,5 +184,5 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
-  )
+  );
 }

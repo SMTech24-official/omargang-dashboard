@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
@@ -22,23 +23,25 @@ interface SidebarProps {
 export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
   const [activeItem, setActiveItem] = useState("dashboard");
   const router = useRouter();
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: BarChart },
-    { id: "stores", label: "Stores/Restaurants", icon: Store },
-    { id: "users", label: "User Management", icon: User },
-    { id: "orders", label: "Order Management", icon: BarChart },
-    { id: "reviews", label: "Reviews Monitoring", icon: Star },
-    { id: "messages", label: "Message", icon: MessageSquare },
-    { id: "settings", label: "Settings", icon: Settings },
-  ];
-  const handleLogout = () => {
-     console.log("hit")
-         router.push("/");
-    Cookies.remove("accessToken");
 
+  const menuItems = [
+    { id: "dashboard", label: "Dashboard",   route: "/admin/dashboard",icon: BarChart },
+    { id: "stores", label: "Stores/Restaurants", route: "/admin/store", icon: Store },
+    { id: "users", label: "User Management",route: "/admin/users", icon: User },
+    { id: "orders", label: "Order Management",route: "/admin/orders", icon: BarChart },
+    { id: "reviews", label: "Reviews Monitoring", route: "/admin/reviews",icon: Star },
+    { id: "messages", label: "Message",  route: "/admin/messages" ,icon: MessageSquare },
+    { id: "settings", label: "Settings", route: "/admin/settings/account", icon: Settings },
+  ];
+
+  const handleLogout = () => {
+    Cookies.remove("accessToken");
+    router.push("/");
   };
+
   return (
-    <div className=" w-80    bg-white ">
+    <div className="w-80 h-screen bg-white flex flex-col justify-between">
+      {/* Header Logo */}
       <div className="p-4">
         <div className="flex items-center gap-2">
           <div className="flex h-12 w-12 items-center justify-center rounded-md bg-green-500 text-white">
@@ -62,7 +65,8 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
         </div>
       </div>
 
-      <div className="mt-6">
+      {/* Navigation Items */}
+      <div className="mt-6 flex-1">
         <div className="px-4 py-2">
           <p className="text-xs font-semibold uppercase text-gray-500">
             Management
@@ -72,9 +76,9 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
           {menuItems.map((item) => (
             <Link
               key={item.id}
-              href="#"
+              href={item.route}
               className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
+                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 activeItem === item.id
                   ? "bg-green-500 text-white"
                   : "text-gray-700 hover:bg-gray-100"
@@ -88,12 +92,13 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
         </nav>
       </div>
 
-      <div className=" bottom-4  absolute    w-full px-2">
+      {/* Logout Button - Same structure as menu items */}
+      <div className="px-2 py-4">
         <button
-
-          className="flex cursor-pointer  w-full  items-center gap-3 rounded-md bg-red-50 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-100"
           onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100"
         >
+          <LogOut className="h-5 w-5" />
           Logout
         </button>
       </div>
