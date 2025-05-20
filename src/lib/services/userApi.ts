@@ -39,6 +39,11 @@ const userApi = baseApi.injectEndpoints({
       query: () => "/auth/profile",
       providesTags: ["users"],
     }),
+
+    getUsers: builder.query({
+      query: ({ page }) => `/users?page=${page}&limit=10`,
+      providesTags: ["users"],
+    }),
   }),
 });
 
@@ -48,4 +53,5 @@ export const {
   useOtpVerificationMutation,
   useMyProfileQuery,
   useProfileUpdateMutation,
+  useGetUsersQuery,
 } = userApi;
