@@ -8,7 +8,7 @@ export const baseApi = createApi({
     prepareHeaders: (headers) => {
       const accessToken = Cookies?.get("accessToken");
       headers.set("x-api-key", `AABBCCCDDDJJKKIIUU1234`);
-      console.log(process.env.API_KEY)
+      console.log(process.env.API_KEY);
       if (accessToken) {
         headers.set("Authorization", `${accessToken}`);
 
@@ -17,5 +17,5 @@ export const baseApi = createApi({
     },
   }),
   endpoints: () => ({}),
-  tagTypes: ["login", "users"],
+  tagTypes: ["login", "users", "sales", "specialFoods", "topSelling"],
 });

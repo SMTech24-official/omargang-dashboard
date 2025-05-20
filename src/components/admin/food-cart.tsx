@@ -1,20 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { Heart } from "lucide-react"
+import { useState } from "react";
+import Image from "next/image";
+import { Heart } from "lucide-react";
 
 interface FoodCardProps {
-  name: string
-  image: string
-  price: string
-  time: string
-  rating: number
-  discount: string
+  name: string;
+  image: string;
+  time: string;
+  rating: number;
+  discount: string;
 }
 
-export default function FoodCard({ name, image, price, time, rating, discount }: FoodCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false)
+export default function FoodCard({
+  name,
+  image,
+  time,
+  rating,
+  discount,
+}: FoodCardProps) {
+  const [isFavorite, setIsFavorite] = useState(false);
 
   return (
     <div className="flex items-center justify-between">
@@ -25,15 +30,13 @@ export default function FoodCard({ name, image, price, time, rating, discount }:
             alt={name}
             width={56}
             height={56}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover rounded-md"
           />
         </div>
         <div>
           <h4 className="font-medium">{name}</h4>
           <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span>{price}</span>
-            <span>|</span>
-            <span>{time}</span>
+            <span>{new Date(time).toLocaleString()}</span>
             <span>|</span>
             <div className="flex items-center gap-1">
               <svg
@@ -53,12 +56,19 @@ export default function FoodCard({ name, image, price, time, rating, discount }:
               <span>{rating}</span>
             </div>
           </div>
-          <div className="mt-1 text-xs font-medium text-gray-500">{discount}</div>
+          <div className="mt-1 text-xs font-medium text-gray-500">
+            {discount} % OFF
+          </div>
         </div>
       </div>
-      <button className="text-gray-400 hover:text-red-500" onClick={() => setIsFavorite(!isFavorite)}>
-        <Heart className={`h-5 w-5 ${isFavorite ? "fill-red-500 text-red-500" : ""}`} />
+      <button
+        className="text-gray-400 hover:text-red-500"
+        onClick={() => setIsFavorite(!isFavorite)}
+      >
+        <Heart
+          className={`h-5 w-5 ${isFavorite ? "fill-red-500 text-red-500" : ""}`}
+        />
       </button>
     </div>
-  )
+  );
 }

@@ -9,8 +9,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex   ">
       <SideMainBar />
       <div className="w-full min-h-screen  flex flex-col ">
-        <Header />
-        <main className="">{children}</main>
+        <Header/>
+        <main className="ml-[330px]">{children}</main>
       </div>
     </div>
   );

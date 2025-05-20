@@ -25,13 +25,48 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
   const router = useRouter();
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard",   route: "/admin/dashboard",icon: BarChart },
-    { id: "stores", label: "Stores/Restaurants", route: "/admin/store", icon: Store },
-    { id: "users", label: "User Management",route: "/admin/users", icon: User },
-    { id: "orders", label: "Order Management",route: "/admin/orders", icon: BarChart },
-    { id: "reviews", label: "Reviews Monitoring", route: "/admin/reviews",icon: Star },
-    { id: "messages", label: "Message",  route: "/admin/messages" ,icon: MessageSquare },
-    { id: "settings", label: "Settings", route: "/admin/settings/account", icon: Settings },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      route: "/admin/dashboard",
+      icon: BarChart,
+    },
+    {
+      id: "stores",
+      label: "Stores/Restaurants",
+      route: "/admin/store",
+      icon: Store,
+    },
+    {
+      id: "users",
+      label: "User Management",
+      route: "/admin/users",
+      icon: User,
+    },
+    {
+      id: "orders",
+      label: "Order Management",
+      route: "/admin/orders",
+      icon: BarChart,
+    },
+    {
+      id: "reviews",
+      label: "Reviews Monitoring",
+      route: "/admin/reviews",
+      icon: Star,
+    },
+    {
+      id: "messages",
+      label: "Message",
+      route: "/admin/messages",
+      icon: MessageSquare,
+    },
+    {
+      id: "settings",
+      label: "Settings",
+      route: "/admin/settings/account",
+      icon: Settings,
+    },
   ];
 
   const handleLogout = () => {
@@ -40,7 +75,7 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
   };
 
   return (
-    <div className="w-80 h-screen bg-white flex flex-col justify-between">
+    <div className="w-80 h-screen bg-white flex flex-col justify-between fixed">
       {/* Header Logo */}
       <div className="p-4">
         <div className="flex items-center gap-2">
