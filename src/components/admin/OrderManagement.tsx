@@ -1,21 +1,64 @@
-import { ChevronLeft, ChevronRight, Filter } from "lucide-react"
-
-// Sample order data
-const orders = Array.from({ length: 11 }, (_, i) => ({
-  id: "#454f5d1fd24124",
-  userName: "Alex Carter",
-  restaurant: "Spice Avenue",
-  status: "Pending", // Default status
-}))
+"use client";
+import { useOrderListQuery } from "@/lib/services/dashboardApi";
+import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { useState } from "react";
 
 export default function OrderManagement() {
+  const [page, setPage] = useState(1);
+  const { data: orders } = useOrderListQuery({ page });
+  console.log(orders);
+
   return (
     <div className="container mx-auto p-6  bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Order Management</h1>
-        <button className="p-2 text-gray-500 hover:text-gray-700">
-          <Filter className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <p>Filter by:</p>
+          <select className="text-black-800 border p-1 rounded-md outline-none">
+            <option
+              value="ORDER_SCHEDULED"
+              className="px-3 py-1  text-green-800 rounded-full text-xs"
+            >
+              Order Scheduled
+            </option>
+            <option
+              value="ORDER_PLANNED"
+              className="px-3 py-1  text-green-800 rounded-full text-xs"
+            >
+              Order Planned
+            </option>
+            <option
+              value="PACKED_READY"
+              className="px-3 py-1  text-green-800 rounded-full text-xs"
+            >
+              Packed & Ready
+            </option>
+            <option
+              value="ORDER_CONFIRMED"
+              className="px-3 py-1 text-green-800 rounded-full text-xs"
+            >
+              Order Confirmed
+            </option>
+            <option
+              value="DRIVER_HEADING"
+              className="px-3 py-1  text-green-800 rounded-full text-xs"
+            >
+              Driver Heading
+            </option>
+            <option
+              value="COMPLETED"
+              className="px-3 py-1  text-green-800 rounded-full text-xs"
+            >
+              Completed
+            </option>
+            <option
+              value="CANCELLED"
+              className="px-3 py-1  text-green-800 rounded-full text-xs"
+            >
+              Canceled
+            </option>
+          </select>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -23,24 +66,77 @@ export default function OrderManagement() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Order Id</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">User Name</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Restaurant</th>
-                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">Status</th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Order Id
+                </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  User Name
+                </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Restaurant
+                </th>
+                <th className="text-center py-3 px-6 text-sm font-medium text-gray-500">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
-              {orders.map((order, index) => (
-                <tr key={index} className="border-b border-gray-200 last:border-0">
-                  <td className="py-4 px-6 text-sm font-medium">{order.id}</td>
-                  <td className="py-4 px-6 text-sm">{order.userName}</td>
-                  <td className="py-4 px-6 text-sm">{order.restaurant}</td>
-                  <td className="py-4 px-6">
-                    <div className="flex space-x-2">
-                      <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs">Pending</span>
-                      <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs">Completed</span>
-                      <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs">Cancelled</span>
-                    </div>
+              {orders?.result?.bookings?.map((order: any) => (
+                <tr
+                  key={order?.id}
+                  className="border-b border-gray-200 last:border-0"
+                >
+                  <td className="py-4 px-6 text-sm font-medium">{order?.id}</td>
+                  <td className="py-4 px-6 text-sm">{order?.user?.username}</td>
+                  <td className="py-4 px-6 text-sm">{order?.address}</td>
+                  <td className="py-4 grid justify-center">
+                    <select
+                      defaultValue={order?.status}
+                      className="text-black-800 border p-1 rounded-md outline-none"
+                    >
+                      <option
+                        value="ORDER_SCHEDULED"
+                        className="px-3 py-1  text-green-800 rounded-full text-xs"
+                      >
+                        Order Scheduled
+                      </option>
+                      <option
+                        value="ORDER_PLANNED"
+                        className="px-3 py-1  text-green-800 rounded-full text-xs"
+                      >
+                        Order Planned
+                      </option>
+                      <option
+                        value="PACKED_READY"
+                        className="px-3 py-1  text-green-800 rounded-full text-xs"
+                      >
+                        Packed & Ready
+                      </option>
+                      <option
+                        value="ORDER_CONFIRMED"
+                        className="px-3 py-1 text-green-800 rounded-full text-xs"
+                      >
+                        Order Confirmed
+                      </option>
+                      <option
+                        value="DRIVER_HEADING"
+                        className="px-3 py-1  text-green-800 rounded-full text-xs"
+                      >
+                        Driver Heading
+                      </option>
+                      <option
+                        value="COMPLETED"
+                        className="px-3 py-1  text-green-800 rounded-full text-xs"
+                      >
+                        Completed
+                      </option>
+                      <option
+                        value="CANCELLED"
+                        className="px-3 py-1  text-green-800 rounded-full text-xs"
+                      >
+                        Canceled
+                      </option>
+                    </select>
                   </td>
                 </tr>
               ))}
@@ -49,32 +145,48 @@ export default function OrderManagement() {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-end items-center px-6 py-4 border-t border-gray-200">
-          <div className="flex items-center space-x-1">
-            <button className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
-              <ChevronLeft className="h-5 w-5" />
-            </button>
+        <div className="flex justify-end items-center px-6 py-4 border-t border-gray-200 gap-4">
+          <button
+            onClick={() => setPage(page - 1)}
+            className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
 
-            <button className="h-8 w-8 flex items-center justify-center rounded-full bg-emerald-500 text-white">
-              1
+          <div className="flex space-x-1">
+            <button
+              className={`h-8 w-8 flex items-center justify-center rounded-full bg-emerald-500 text-white`}
+            >
+              {page}
             </button>
+            <button
+              onClick={() => setPage(page + 1)}
+              className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+            >
+              {page + 1}
+            </button>
+            <button
+              onClick={() => setPage(page + 2)}
+              className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+            >
+              {page + 2}
+            </button>
+            <span className="h-8 w-8 flex items-center justify-center">
+              ...
+            </span>
             <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-              2
-            </button>
-            <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-              3
-            </button>
-            <span className="h-8 w-8 flex items-center justify-center">...</span>
-            <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-              440
-            </button>
-
-            <button className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
-              <ChevronRight className="h-5 w-5" />
+              {orders?.result?.meta?.totalPages}
             </button>
           </div>
+
+          <button
+            onClick={() => setPage(page + 1)}
+            className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -27,6 +27,11 @@ const dashboardApi = baseApi.injectEndpoints({
       query: ({ page }) => `/food?limit=10&page=${page}`,
       providesTags: ["foodLists"],
     }),
+
+    orderList: builder.query({
+      query: ({ page }) => `/booking/admin?limit=10&page=${page}`,
+      providesTags: ["bookings"],
+    }),
   }),
 });
 
@@ -36,4 +41,5 @@ export const {
   useSpecialFoodsQuery,
   useTopSellingQuery,
   useFoodListsQuery,
+  useOrderListQuery
 } = dashboardApi;

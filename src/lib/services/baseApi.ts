@@ -24,5 +24,6 @@ export const baseApi = createApi({
     "specialFoods",
     "topSelling",
     "foodLists",
+    "bookings",
   ],
 });
