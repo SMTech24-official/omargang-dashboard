@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { ChevronRight, Info, ChevronDown, Pencil } from 'lucide-react'
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ChevronRight, Info, ChevronDown, Pencil } from "lucide-react";
 
 export default function Profile() {
   const [profileData, setProfileData] = useState({
@@ -12,16 +12,16 @@ export default function Profile() {
     country: "India",
     city: "Delhi",
     province: "Street 01",
-    bio: "I specialize in HRM role"
-  })
+    bio: "I specialize in HRM role",
+  });
 
   return (
-    <div className="flex   min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
       <div className="w-64  bg-grey-50">
         <nav className="p-4 space-y-1">
           <Link
-            href="/settings/basic"
+            href="/admin/settings/basic"
             className="flex items-center justify-between px-4 py-3 text-white bg-emerald-500 rounded-lg"
           >
             <span>Basic</span>
@@ -29,7 +29,7 @@ export default function Profile() {
           </Link>
 
           <Link
-            href="/settings/account"
+            href="/admin/settings/account"
             className="flex items-center justify-between px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100"
           >
             <span>Account</span>
@@ -37,7 +37,7 @@ export default function Profile() {
           </Link>
 
           <Link
-            href="/settings/notifications"
+            href="/admin/settings/notifications"
             className="flex items-center justify-between px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100"
           >
             <span>Notifications</span>
@@ -70,8 +70,8 @@ export default function Profile() {
                     className="object-cover"
                   />
                 </div>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-sm border border-gray-200"
                 >
                   <Pencil className="h-3 w-3 text-gray-500" />
@@ -81,28 +81,41 @@ export default function Profile() {
 
             {/* Display Name */}
             <div>
-              <label htmlFor="display-name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="display-name"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Display Name
               </label>
               <input
                 id="display-name"
                 type="text"
                 value={profileData.displayName}
-                onChange={(e) => setProfileData({...profileData, displayName: e.target.value})}
+                onChange={(e) =>
+                  setProfileData({
+                    ...profileData,
+                    displayName: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Email
               </label>
               <input
                 id="email"
                 type="email"
                 value={profileData.email}
-                onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                onChange={(e) =>
+                  setProfileData({ ...profileData, email: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
               />
             </div>
@@ -111,14 +124,22 @@ export default function Profile() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Country */}
               <div>
-                <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="country"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Country
                 </label>
                 <div className="relative">
                   <select
                     id="country"
                     value={profileData.country}
-                    onChange={(e) => setProfileData({...profileData, country: e.target.value})}
+                    onChange={(e) =>
+                      setProfileData({
+                        ...profileData,
+                        country: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none"
                   >
                     <option value="India">India</option>
@@ -131,14 +152,19 @@ export default function Profile() {
 
               {/* City */}
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   City
                 </label>
                 <div className="relative">
                   <select
                     id="city"
                     value={profileData.city}
-                    onChange={(e) => setProfileData({...profileData, city: e.target.value})}
+                    onChange={(e) =>
+                      setProfileData({ ...profileData, city: e.target.value })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none"
                   >
                     <option value="Delhi">Delhi</option>
@@ -151,14 +177,22 @@ export default function Profile() {
 
               {/* Province */}
               <div>
-                <label htmlFor="province" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="province"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Province
                 </label>
                 <div className="relative">
                   <select
                     id="province"
                     value={profileData.province}
-                    onChange={(e) => setProfileData({...profileData, province: e.target.value})}
+                    onChange={(e) =>
+                      setProfileData({
+                        ...profileData,
+                        province: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none"
                   >
                     <option value="Street 01">Street 01</option>
@@ -172,13 +206,18 @@ export default function Profile() {
 
             {/* Bio */}
             <div>
-              <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="bio"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Bio
               </label>
               <textarea
                 id="bio"
                 value={profileData.bio}
-                onChange={(e) => setProfileData({...profileData, bio: e.target.value})}
+                onChange={(e) =>
+                  setProfileData({ ...profileData, bio: e.target.value })
+                }
                 rows={3}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
               />
@@ -197,5 +236,5 @@ export default function Profile() {
         </div>
       </div>
     </div>
-  )
+  );
 }

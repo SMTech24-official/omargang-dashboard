@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { ChevronRight, Eye, EyeOff, Info } from "lucide-react"
+import { useState } from "react";
+import Link from "next/link";
+import { ChevronRight, Eye, EyeOff, Info } from "lucide-react";
 
 export default function AccountPage() {
-  const [showOldPassword, setShowOldPassword] = useState(false)
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -50,7 +50,10 @@ export default function AccountPage() {
 
           <form className="space-y-6">
             <div>
-              <label htmlFor="old-password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="old-password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Old Password
               </label>
               <div className="relative">
@@ -75,7 +78,10 @@ export default function AccountPage() {
             </div>
 
             <div>
-              <label htmlFor="new-password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="new-password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 New Password
               </label>
               <div className="relative">
@@ -97,11 +103,16 @@ export default function AccountPage() {
                   )}
                 </button>
               </div>
-              <p className="mt-1 text-xs text-gray-500">Min 8 Characters with a combination of letters and numbers</p>
+              <p className="mt-1 text-xs text-gray-500">
+                Min 8 Characters with a combination of letters and numbers
+              </p>
             </div>
 
             <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="confirm-password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Confirmation New Password
               </label>
               <div className="relative">
@@ -137,5 +148,5 @@ export default function AccountPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -64,7 +64,7 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
     {
       id: "settings",
       label: "Settings",
-      route: "/admin/settings/account",
+      route: "/admin/settings/basic",
       icon: Settings,
     },
   ];
