@@ -1,15 +1,20 @@
 "use client";
-import { useOrderListQuery } from "@/lib/services/dashboardApi";
+import {
+  useOrderListQuery,
+  useOrderStatusUpdateMutation,
+} from "@/lib/services/dashboardApi";
 import { ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function OrderManagement() {
   const [page, setPage] = useState(1);
   const { data: orders } = useOrderListQuery({ page });
-  console.log(orders);
+  const [orderUpdate, { isLoading }] = useOrderStatusUpdateMutation();
 
   return (
     <div className="container mx-auto p-6  bg-gray-50 min-h-screen">
+      <ToastContainer position="bottom-right" />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Order Management</h1>
         <div className="flex items-center gap-1">
@@ -93,6 +98,22 @@ export default function OrderManagement() {
                     <select
                       defaultValue={order?.status}
                       className="text-black-800 border p-1 rounded-md outline-none"
+                      onChange={async (e) => {
+                        const selectedStatus = e.target.value;
+
+                        try {
+                          await orderUpdate({
+                            bookingId: order?.id,
+                            data: { status: selectedStatus },
+                          });
+
+                          toast.success("Order status updated!");
+                        } catch (error) {
+                          toast.error("Failed to update order status.");
+                          console.error("Status update error:", error);
+                        }
+                      }}
+                      disabled={isLoading}
                     >
                       <option
                         value="ORDER_SCHEDULED"

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ChevronRight, Info, ChevronDown, Pencil } from "lucide-react";
 import {
   useMyProfileQuery,
+  useProfileImageUpdateMutation,
   useProfileUpdateMutation,
 } from "@/lib/services/userApi";
 import { toast, ToastContainer } from "react-toastify";
@@ -13,6 +14,8 @@ import { toast, ToastContainer } from "react-toastify";
 export default function Profile() {
   const { data: userInfo } = useMyProfileQuery("");
   const [updateFunc, { isLoading: updateLoading }] = useProfileUpdateMutation();
+  const [updateProfileImageFunc, { isLoading: imageUpdateLoading }] =
+    useProfileImageUpdateMutation();
 
   const [profileData, setProfileData] = useState({
     username: "",
@@ -45,6 +48,26 @@ export default function Profile() {
         toast.error(response?.error?.message);
       }
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("profileImage", file);
+
+    try {
+      const response: any = await updateProfileImageFunc(formData);
+      if ("data" in response) {
+        toast.success("Profile image updated successfully!");
+      } else {
+        toast.error(response?.error?.message || "Image update failed.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong while updating image.");
       console.log(error);
     }
   };
@@ -107,10 +130,20 @@ export default function Profile() {
                 </div>
                 <button
                   type="button"
+                  onClick={() =>
+                    document.getElementById("profileImageInput")?.click()
+                  }
                   className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-sm border border-gray-200"
                 >
                   <Pencil className="h-3 w-3 text-gray-500" />
                 </button>
+                <input
+                  id="profileImageInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
               </div>
             </div>
 

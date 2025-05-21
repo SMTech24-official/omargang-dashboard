@@ -32,6 +32,15 @@ const dashboardApi = baseApi.injectEndpoints({
       query: ({ page }) => `/booking/admin?limit=10&page=${page}`,
       providesTags: ["bookings"],
     }),
+
+    orderStatusUpdate: builder.mutation({
+      query: ({ bookingId, data }) => ({
+        url: `/booking/update-booking-status/${bookingId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["bookings"],
+    }),
   }),
 });
 
@@ -41,5 +50,6 @@ export const {
   useSpecialFoodsQuery,
   useTopSellingQuery,
   useFoodListsQuery,
-  useOrderListQuery
+  useOrderListQuery,
+  useOrderStatusUpdateMutation,
 } = dashboardApi;

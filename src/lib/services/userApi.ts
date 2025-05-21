@@ -27,6 +27,15 @@ const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
+    profileImageUpdate: builder.mutation({
+      query: (formData: FormData) => ({
+        url: "/auth/update-profile-image",
+        method: "PATCH",
+        body: formData,
+      }),
+      invalidatesTags: ["users"],
+    }),
+
     changePassword: builder.mutation({
       query: (data) => ({
         url: "/auth/password-change",
@@ -63,4 +72,5 @@ export const {
   useProfileUpdateMutation,
   useGetUsersQuery,
   useChangePasswordMutation,
+  useProfileImageUpdateMutation,
 } = userApi;
