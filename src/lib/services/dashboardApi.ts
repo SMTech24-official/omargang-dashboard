@@ -28,6 +28,11 @@ const dashboardApi = baseApi.injectEndpoints({
       providesTags: ["foodLists"],
     }),
 
+    foodInfo: builder.query({
+      query: ({ foodId }) => `/food/get-single-food/${foodId}`,
+      providesTags: ["foodLists"],
+    }),
+
     foodDelete: builder.mutation({
       query: ({ foodId }) => ({
         url: `/food/delete-food/${foodId}`,
@@ -41,6 +46,15 @@ const dashboardApi = baseApi.injectEndpoints({
         url: `/food/create`,
         method: "POST",
         body: foodData,
+      }),
+      invalidatesTags: ["foodLists"],
+    }),
+
+    updateFood: builder.mutation({
+      query: ({ foodId, form }: {foodId: string; form: FormData}) => ({
+        url: `/food/update-food/${foodId}`,
+        method: "PATCH",
+        body: form,
       }),
       invalidatesTags: ["foodLists"],
     }),
@@ -71,4 +85,6 @@ export const {
   useOrderStatusUpdateMutation,
   useFoodDeleteMutation,
   useAddFoodMutation,
+  useFoodInfoQuery,
+  useUpdateFoodMutation,
 } = dashboardApi;

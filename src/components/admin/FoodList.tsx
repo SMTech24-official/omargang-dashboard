@@ -64,7 +64,7 @@ export default function FoodList() {
           <tbody>
             {foodLists?.result?.foods?.map((food: any) => (
               <tr
-                key={food?._id?.oid}
+                key={food?.id}
                 className="border-b border-gray-200 hover:bg-gray-50"
               >
                 <td className="py-4 px-6">
@@ -91,16 +91,16 @@ export default function FoodList() {
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex space-x-2">
-                    <Link href={`/admin/store/${food?._id?.$oid}`}>
+                    <Link href={`/admin/food/${food?.id}`}>
                       <button className="px-3 py-1 bg-blue-50 text-blue-600 rounded text-sm hover:bg-blue-100 transition-colors">
                         Edit
                       </button>
                     </Link>
                     <button
-                      onClick={() => handleFoodDelete(food?._id?.$oid)}
+                      onClick={() => handleFoodDelete(food?.id)}
                       className="px-3 py-1 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors"
                     >
-                      Delete
+                      {isLoading ? "Deleting..." : "Delete"}
                     </button>
                   </div>
                 </td>

@@ -147,7 +147,7 @@ export default function AddFood() {
       <ToastContainer position="bottom-right" />
       <div className="mb-6">
         <Link
-          href="/admin/store"
+          href="/admin/food"
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
@@ -358,7 +358,7 @@ export default function AddFood() {
             type="submit"
             className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
           >
-            Submit
+            {isLoading ? "Submitting..." : "Submit"}
           </button>
         </div>
       </form>
