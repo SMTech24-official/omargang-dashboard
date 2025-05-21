@@ -28,6 +28,23 @@ const dashboardApi = baseApi.injectEndpoints({
       providesTags: ["foodLists"],
     }),
 
+    foodDelete: builder.mutation({
+      query: ({ foodId }) => ({
+        url: `/food/delete-food/${foodId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["foodLists"],
+    }),
+
+    addFood: builder.mutation({
+      query: (foodData: FormData) => ({
+        url: `/food/create`,
+        method: "POST",
+        body: foodData,
+      }),
+      invalidatesTags: ["foodLists"],
+    }),
+
     orderList: builder.query({
       query: ({ page }) => `/booking/admin?limit=10&page=${page}`,
       providesTags: ["bookings"],
@@ -52,4 +69,6 @@ export const {
   useFoodListsQuery,
   useOrderListQuery,
   useOrderStatusUpdateMutation,
+  useFoodDeleteMutation,
+  useAddFoodMutation,
 } = dashboardApi;

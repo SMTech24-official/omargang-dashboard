@@ -2,18 +2,37 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useFoodListsQuery } from "@/lib/services/dashboardApi";
+import {
+  useFoodDeleteMutation,
+  useFoodListsQuery,
+} from "@/lib/services/dashboardApi";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function FoodList() {
   const [page, setPage] = useState(1);
   const { data: foodLists } = useFoodListsQuery({ page });
-  console.log(foodLists);
+  const [deleteFoodFunc, { isLoading }] = useFoodDeleteMutation();
+
+  const handleFoodDelete = async (foodId: string) => {
+    try {
+      const response: any = await deleteFoodFunc({ foodId });
+      console.log(response);
+      if (response.data) {
+        toast.success("Food Deleted Successfully");
+      } else {
+        toast.error(response.error.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <div className="rounded-lg shadow-sm overflow-hidden">
+    <div className="rounded-lg shadow-sm overflow-hidden min-h-screen">
+      <ToastContainer position="bottom-right" />
       <div className="flex justify-between items-center p-6">
-        <h2 className="text-xl font-semibold">Stores/Food List</h2>
+        <h2 className="text-xl font-semibold">Food List</h2>
         <Link
           href="/admin/addFood"
           className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-md transition-colors"
@@ -44,7 +63,7 @@ export default function FoodList() {
           <tbody>
             {foodLists?.result?.foods?.map((food: any) => (
               <tr
-                key={food?.id}
+                key={food?._id?.oid}
                 className="border-b border-gray-200 hover:bg-gray-50"
               >
                 <td className="py-4 px-6">
@@ -69,10 +88,15 @@ export default function FoodList() {
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex space-x-2">
-                    <button className="px-3 py-1 bg-blue-50 text-blue-600 rounded text-sm hover:bg-blue-100 transition-colors">
-                      Edit
-                    </button>
-                    <button className="px-3 py-1 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors">
+                    <Link href={`/admin/store/${food?._id?.$oid}`}>
+                      <button className="px-3 py-1 bg-blue-50 text-blue-600 rounded text-sm hover:bg-blue-100 transition-colors">
+                        Edit
+                      </button>
+                    </Link>
+                    <button
+                      onClick={() => handleFoodDelete(food?._id?.$oid)}
+                      className="px-3 py-1 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors"
+                    >
                       Delete
                     </button>
                   </div>

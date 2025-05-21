@@ -8,8 +8,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="fixed top-0 left-0 h-screen w-[300px] bg-white shadow">
         <SideMainBar />
       </div>
-      <div className="ml-[310px] flex flex-col w-full min-h-screen gap-2">
-        <div className="sticky top-0 z-10 bg-white px-4 py-2 shadow-md ms-3 rounded-md">
+      <div className="ml-[320px] flex flex-col w-full min-h-screen gap-2">
+        <div className="sticky top-0 z-10 bg-white px-4 py-2 shadow-md rounded-md">
           <Header />
         </div>
         <main className="bg-gray-50">{children}</main>

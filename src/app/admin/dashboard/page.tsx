@@ -47,7 +47,7 @@ export default function Dashboard() {
   };
 
   return (
-    <>
+    <div className="p-6 min-h-screen">
       <div className="grid grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-5">
         <StatCard
           title="Total Restaurants"
@@ -193,6 +193,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
