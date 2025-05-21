@@ -4,9 +4,8 @@ import { useRef, useState } from "react";
 import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
 import Link from "next/link";
 import { useAddFoodMutation } from "@/lib/services/dashboardApi";
+import LocationPickerModal from "../mapSelector";
 import Select, { MultiValue } from "react-select";
-import { toast, ToastContainer } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 enum FoodType {
   FRUIT,
@@ -45,11 +44,16 @@ enum DietType {
 
 type FormDataType = {
   name: string;
-  description: string;
   foodType: string;
   dietPreferences: string;
+  address: string;
   price: string;
   discount: string;
+  contactNumber: string;
+  description: string;
+  location: string;
+  latitude: string;
+  longitude: string;
   restaurantsIds: string[];
 };
 
@@ -64,13 +68,11 @@ const foodTypeOptions = Object.keys(FoodType).filter((key) =>
 
 const dietOptions = Object.values(DietType);
 
-export default function AddFood() {
+export default function AddStore() {
   const [addFoodFunc, { isLoading }] = useAddFoodMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
-  const router = useRouter();
+  const [showMap, setShowMap] = useState(false);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -79,7 +81,6 @@ export default function AddFood() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file);
       const imageURL = URL.createObjectURL(file);
       setSelectedImage(imageURL);
     }
@@ -88,9 +89,14 @@ export default function AddFood() {
     name: "",
     foodType: "",
     dietPreferences: "",
+    address: "",
     price: "",
     discount: "",
+    contactNumber: "",
     description: "",
+    location: "",
+    latitude: "",
+    longitude: "",
     restaurantsIds: [],
   });
 
@@ -104,7 +110,7 @@ export default function AddFood() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!imageFile) {
+    if (!selectedImage) {
       alert("Please select an image.");
       return;
     }
@@ -114,22 +120,23 @@ export default function AddFood() {
     form.append("description", formData.description);
     form.append("foodType", formData.foodType);
     form.append("dietPreferences", formData.dietPreferences);
+    form.append("address", formData.address);
     form.append("price", formData.price);
     form.append("discount", formData.discount);
-    form.append("foodImage", imageFile);
-    formData.restaurantsIds.forEach((id) => {
-      form.append("restaurantsIds[]", id);
-    });
+    form.append("contactNumber", formData.contactNumber);
+    form.append("foodImage", selectedImage);
+    form.append("restaurantsIds", JSON.stringify(formData.restaurantsIds));
+
+    // Example location coordinates (replace with actual location selection logic)
+    form.append("location[type]", "Point");
+    form.append("location[coordinates][]", formData.latitude);
+    form.append("location[coordinates][]", formData.longitude);
 
     try {
-      const response: any = await addFoodFunc(form);
+      const response = await addFoodFunc(form);
       console.log(response);
-      if (response.data) {
-        toast.success("Food Added Successfully");
-        router.push("/admin/food");
-      } else {
-        toast.error(response.error.message);
-      }
+      console.log(form);
+      alert("Food added successfully!");
     } catch (err) {
       console.error("Error:", err);
       alert("Something went wrong");
@@ -138,20 +145,20 @@ export default function AddFood() {
 
   // Sample data for options
   const restaurantOptions: OptionType[] = [
-    { value: "682a9d228c2f2e167df5a6b7", label: "KFC" },
-    { value: "682a9d228c2f2e167df5a6b8", label: "KFC2" },
+    { value: "1", label: "KFC" },
+    { value: "2", label: "Pizza Hut" },
+    { value: "3", label: "Burger King" },
   ];
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-gray-50 min-h-screen">
-      <ToastContainer position="bottom-right" />
       <div className="mb-6">
         <Link
           href="/admin/store"
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
-          <span>Add Food</span>
+          <span>Add Store</span>
         </Link>
       </div>
 
@@ -312,6 +319,44 @@ export default function AddFood() {
           />
         </div>
 
+        <div>
+          {/* Location Input */}
+          <div>
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Location
+            </label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              value={formData.location}
+              placeholder="Search or click to select"
+              onFocus={() => setShowMap(true)}
+              readOnly
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none cursor-pointer"
+            />
+          </div>
+
+          {/* Modal */}
+          {showMap && (
+            <LocationPickerModal
+              onClose={() => setShowMap(false)}
+              onLocationSelect={(lat, lng, address) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  location: address,
+                  address: address,
+                  latitude: lat.toString(),
+                  longitude: lng.toString(),
+                }));
+              }}
+            />
+          )}
+        </div>
+
         {/* Price and Discount Rate */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -350,6 +395,25 @@ export default function AddFood() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
             />
           </div>
+        </div>
+
+        {/* Contact Info */}
+        <div>
+          <label
+            htmlFor="contactNumber"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Contact Info
+          </label>
+          <input
+            type="text"
+            id="contactNumber"
+            name="contactNumber"
+            value={formData.contactNumber}
+            placeholder="Enter Contact Number"
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+          />
         </div>
 
         {/* Submit Button */}

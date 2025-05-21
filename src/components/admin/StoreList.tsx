@@ -9,10 +9,9 @@ import {
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
-export default function FoodList() {
+export default function StoreList() {
   const [page, setPage] = useState(1);
   const { data: foodLists } = useFoodListsQuery({ page });
-  console.log(foodLists);
   const [deleteFoodFunc, { isLoading }] = useFoodDeleteMutation();
 
   const handleFoodDelete = async (foodId: string) => {
@@ -33,12 +32,12 @@ export default function FoodList() {
     <div className="rounded-lg shadow-sm overflow-hidden min-h-screen">
       <ToastContainer position="bottom-right" />
       <div className="flex justify-between items-center p-6">
-        <h2 className="text-xl font-semibold">Food List</h2>
+        <h2 className="text-xl font-semibold">Store List</h2>
         <Link
-          href="/admin/food/add-food"
+          href="/admin/store/add-store"
           className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-md transition-colors"
         >
-          Add Food
+          Add Store
         </Link>
       </div>
 
@@ -51,10 +50,10 @@ export default function FoodList() {
                 Name
               </th>
               <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
-                Description
+                Location
               </th>
               <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
-                Rating
+                Contact Info
               </th>
               <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
                 Action
@@ -82,12 +81,10 @@ export default function FoodList() {
                   </div>
                 </td>
                 <td className="py-4 px-6 text-sm text-gray-600">
-                  {food?.description}
+                  {food?.address}
                 </td>
                 <td className="py-4 px-6 text-sm text-gray-600">
-                  {food?.avarageRatting === 0
-                    ? "Not review yet"
-                    : food?.avarageRatting}
+                  {food?.contactNumber}
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex space-x-2">

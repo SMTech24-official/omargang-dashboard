@@ -24,7 +24,7 @@ const dashboardApi = baseApi.injectEndpoints({
     }),
 
     foodLists: builder.query({
-      query: ({ page }) => `/food?limit=10&page=${page}`,
+      query: ({ page }) => `/food/admin?limit=10&page=${page}`,
       providesTags: ["foodLists"],
     }),
 

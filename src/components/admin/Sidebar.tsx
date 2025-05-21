@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 import {
   BarChart,
   LogOut,
@@ -11,9 +12,8 @@ import {
   Store,
   User,
 } from "lucide-react";
+import { BiFoodMenu } from "react-icons/bi";
 import { cn } from "@/lib/utils";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -21,7 +21,7 @@ interface SidebarProps {
 }
 
 export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
-  const [activeItem, setActiveItem] = useState("dashboard");
+  const pathname = usePathname();
   const router = useRouter();
 
   const menuItems = [
@@ -31,12 +31,8 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
       route: "/admin/dashboard",
       icon: BarChart,
     },
-    {
-      id: "stores",
-      label: "Stores/Food",
-      route: "/admin/store",
-      icon: Store,
-    },
+    { id: "stores", label: "Stores", route: "/admin/store", icon: Store },
+    { id: "foods", label: "Food", route: "/admin/food", icon: BiFoodMenu },
     {
       id: "users",
       label: "User Management",
@@ -108,26 +104,28 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
           </p>
         </div>
         <nav className="space-y-1 px-2">
-          {menuItems.map((item) => (
-            <Link
-              key={item.id}
-              href={item.route}
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                activeItem === item.id
-                  ? "bg-green-500 text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              )}
-              onClick={() => setActiveItem(item.id)}
-            >
-              <item.icon className="h-5 w-5" />
-              {item.label}
-            </Link>
-          ))}
+          {menuItems.map((item) => {
+            const isActive = pathname.startsWith(item.route);
+            return (
+              <Link
+                key={item.id}
+                href={item.route}
+                className={cn(
+                  "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-green-500 text-white"
+                    : "text-gray-700 hover:bg-gray-100"
+                )}
+              >
+                <item.icon className="h-5 w-5" />
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
 
-      {/* Logout Button - Same structure as menu items */}
+      {/* Logout Button */}
       <div className="px-2 py-4">
         <button
           onClick={handleLogout}
