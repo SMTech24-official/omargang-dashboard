@@ -16,7 +16,7 @@ const Header = () => {
         <div className=" h-12 w-12 overflow-hidden rounded-full ">
           {!isLoading ? (
             <Image
-              src={data?.result?.userInfo?.profileImage ?? "/admin.png"}
+              src={data?.result?.userInfo?.avater ?? "/admin.png"}
               alt="Profile"
               width={40}
               height={40}

@@ -1,22 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight, Info, ChevronDown, Pencil } from "lucide-react";
+import {
+  useMyProfileQuery,
+  useProfileUpdateMutation,
+} from "@/lib/services/userApi";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Profile() {
+  const { data: userInfo } = useMyProfileQuery("");
+  const [updateFunc, { isLoading: updateLoading }] = useProfileUpdateMutation();
+
   const [profileData, setProfileData] = useState({
-    displayName: "Bryan Adams",
-    email: "bryanadams@gmail.com",
-    country: "India",
-    city: "Delhi",
-    province: "Street 01",
-    bio: "I specialize in HRM role",
+    username: "",
+    email: "",
+    gender: "",
+    country: "",
+    role: "",
   });
+
+  useEffect(() => {
+    if (userInfo?.result?.userInfo) {
+      const user = userInfo.result.userInfo;
+      setProfileData({
+        username: user.username || "",
+        email: user.email || "",
+        gender: user.gender || "",
+        country: user.country || "",
+        role: user.role || "",
+      });
+    }
+  }, [userInfo]);
+
+  const handleProfileUpdate = async (e: any) => {
+    e.preventDefault();
+    try {
+      const response: any = await updateFunc(profileData);
+      if (response.data) {
+        toast.success("Profile Update Successfully");
+      } else {
+        toast.error(response?.error?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
+      <ToastContainer position="bottom-right" />
       {/* Sidebar */}
       <div className="w-64  bg-grey-50">
         <nav className="p-4 space-y-1">
@@ -54,7 +89,7 @@ export default function Profile() {
             <Info className="h-5 w-5 text-gray-400 ml-2" />
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={(e) => handleProfileUpdate(e)}>
             {/* Photo Profile */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -63,7 +98,7 @@ export default function Profile() {
               <div className="relative inline-block">
                 <div className="h-16 w-16 rounded-md overflow-hidden bg-emerald-50">
                   <Image
-                    src="/placeholder.svg?height=64&width=64"
+                    src={userInfo?.result?.userInfo?.avater ?? "/admin.png"}
                     alt="Profile"
                     width={64}
                     height={64}
@@ -89,12 +124,12 @@ export default function Profile() {
               </label>
               <input
                 id="display-name"
+                defaultValue={profileData?.username}
                 type="text"
-                value={profileData.displayName}
                 onChange={(e) =>
                   setProfileData({
                     ...profileData,
-                    displayName: e.target.value,
+                    username: e.target.value,
                   })
                 }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
@@ -110,9 +145,10 @@ export default function Profile() {
                 Email
               </label>
               <input
+                readOnly
                 id="email"
                 type="email"
-                value={profileData.email}
+                value={profileData?.email}
                 onChange={(e) =>
                   setProfileData({ ...profileData, email: e.target.value })
                 }
@@ -142,6 +178,7 @@ export default function Profile() {
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none"
                   >
+                    <option value="">Select Country</option>
                     <option value="India">India</option>
                     <option value="USA">USA</option>
                     <option value="UK">UK</option>
@@ -150,62 +187,53 @@ export default function Profile() {
                 </div>
               </div>
 
-              {/* City */}
+              {/* Gender */}
               <div>
                 <label
-                  htmlFor="city"
+                  htmlFor="gender"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  City
+                  Gender
                 </label>
                 <div className="relative">
                   <select
-                    id="city"
-                    value={profileData.city}
+                    id="gender"
+                    value={profileData.gender}
                     onChange={(e) =>
-                      setProfileData({ ...profileData, city: e.target.value })
+                      setProfileData({ ...profileData, gender: e.target.value })
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none"
                   >
-                    <option value="Delhi">Delhi</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Bangalore">Bangalore</option>
+                    <option value="">Select Gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
                 </div>
               </div>
 
-              {/* Province */}
               <div>
                 <label
-                  htmlFor="province"
+                  htmlFor="role"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Province
+                  Role
                 </label>
-                <div className="relative">
-                  <select
-                    id="province"
-                    value={profileData.province}
-                    onChange={(e) =>
-                      setProfileData({
-                        ...profileData,
-                        province: e.target.value,
-                      })
-                    }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none appearance-none"
-                  >
-                    <option value="Street 01">Street 01</option>
-                    <option value="Street 02">Street 02</option>
-                    <option value="Street 03">Street 03</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-                </div>
+                <input
+                  readOnly
+                  id="role"
+                  type="text"
+                  value={userInfo?.result?.userInfo?.role}
+                  onChange={(e) =>
+                    setProfileData({ ...profileData, email: e.target.value })
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                />
               </div>
             </div>
 
             {/* Bio */}
-            <div>
+            {/* <div>
               <label
                 htmlFor="bio"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -221,7 +249,7 @@ export default function Profile() {
                 rows={3}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
               />
-            </div>
+            </div> */}
 
             {/* Save Button */}
             <div>
@@ -229,7 +257,7 @@ export default function Profile() {
                 type="submit"
                 className="px-6 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
               >
-                Save
+                {updateLoading ? "Saving..." : "Save"}
               </button>
             </div>
           </form>

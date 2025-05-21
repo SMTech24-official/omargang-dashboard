@@ -20,11 +20,19 @@ const userApi = baseApi.injectEndpoints({
 
     profileUpdate: builder.mutation({
       query: (data) => ({
-        url: "/auth/profile",
-        method: "PUT",
+        url: "/auth/update-profile",
+        method: "PATCH",
         body: data,
       }),
       invalidatesTags: ["users"],
+    }),
+
+    changePassword: builder.mutation({
+      query: (data) => ({
+        url: "/auth/password-change",
+        method: "PATCH",
+        body: data,
+      }),
     }),
 
     otpVerification: builder.mutation({
@@ -54,4 +62,5 @@ export const {
   useMyProfileQuery,
   useProfileUpdateMutation,
   useGetUsersQuery,
+  useChangePasswordMutation,
 } = userApi;
