@@ -28,9 +28,19 @@ const dashboardApi = baseApi.injectEndpoints({
       providesTags: ["foodLists"],
     }),
 
+    storeLists: builder.query({
+      query: ({ page }) => `/restaurants?limit=10&page=${page}`,
+      providesTags: ["storeLists"],
+    }),
+
     foodInfo: builder.query({
       query: ({ foodId }) => `/food/get-single-food/${foodId}`,
       providesTags: ["foodLists"],
+    }),
+
+    storeInfo: builder.query({
+      query: ({ storeId }) => `/restaurants/${storeId}`,
+      providesTags: ["storeLists"],
     }),
 
     foodDelete: builder.mutation({
@@ -39,6 +49,14 @@ const dashboardApi = baseApi.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: ["foodLists"],
+    }),
+
+    storeDelete: builder.mutation({
+      query: ({ storeId }) => ({
+        url: `/restaurants/delete-store/${storeId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["storeLists"],
     }),
 
     addFood: builder.mutation({
@@ -50,13 +68,31 @@ const dashboardApi = baseApi.injectEndpoints({
       invalidatesTags: ["foodLists"],
     }),
 
+    addStore: builder.mutation({
+      query: (foodData: FormData) => ({
+        url: `/restaurants/create`,
+        method: "POST",
+        body: foodData,
+      }),
+      invalidatesTags: ["storeLists"],
+    }),
+
     updateFood: builder.mutation({
-      query: ({ foodId, form }: {foodId: string; form: FormData}) => ({
+      query: ({ foodId, form }: { foodId: string; form: FormData }) => ({
         url: `/food/update-food/${foodId}`,
         method: "PATCH",
         body: form,
       }),
       invalidatesTags: ["foodLists"],
+    }),
+
+    updateStore: builder.mutation({
+      query: ({ storeId, form }: { storeId: string; form: FormData }) => ({
+        url: `/restaurants/update/${storeId}`,
+        method: "PATCH",
+        body: form,
+      }),
+      invalidatesTags: ["storeLists"],
     }),
 
     orderList: builder.query({
@@ -87,4 +123,9 @@ export const {
   useAddFoodMutation,
   useFoodInfoQuery,
   useUpdateFoodMutation,
+  useAddStoreMutation,
+  useStoreListsQuery,
+  useStoreDeleteMutation,
+  useStoreInfoQuery,
+  useUpdateStoreMutation,
 } = dashboardApi;

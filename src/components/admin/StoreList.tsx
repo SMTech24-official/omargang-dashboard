@@ -3,23 +3,24 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import {
-  useFoodDeleteMutation,
-  useFoodListsQuery,
+  useStoreDeleteMutation,
+  useStoreListsQuery,
 } from "@/lib/services/dashboardApi";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function StoreList() {
   const [page, setPage] = useState(1);
-  const { data: foodLists } = useFoodListsQuery({ page });
-  const [deleteFoodFunc, { isLoading }] = useFoodDeleteMutation();
+  const { data: storeLists } = useStoreListsQuery({ page });
+  console.log(storeLists);
+  const [deleteStoreFunc, { isLoading }] = useStoreDeleteMutation();
 
-  const handleFoodDelete = async (foodId: string) => {
+  const handleFoodDelete = async (storeId: string) => {
     try {
-      const response: any = await deleteFoodFunc({ foodId });
+      const response: any = await deleteStoreFunc({ storeId });
       console.log(response);
       if (response.data) {
-        toast.success("Food Deleted Successfully");
+        toast.success("Store Deleted Successfully");
       } else {
         toast.error(response.error.message);
       }
@@ -61,9 +62,9 @@ export default function StoreList() {
             </tr>
           </thead>
           <tbody>
-            {foodLists?.result?.foods?.map((food: any) => (
+            {storeLists?.result?.data?.map((food: any) => (
               <tr
-                key={food?._id?.oid}
+                key={food?.id}
                 className="border-b border-gray-200 hover:bg-gray-50"
               >
                 <td className="py-4 px-6">
@@ -84,20 +85,20 @@ export default function StoreList() {
                   {food?.address}
                 </td>
                 <td className="py-4 px-6 text-sm text-gray-600">
-                  {food?.contactNumber}
+                  {food?.contactInfo}
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex space-x-2">
-                    <Link href={`/admin/store/${food?._id?.$oid}`}>
+                    <Link href={`/admin/store/${food?.id}`}>
                       <button className="px-3 py-1 bg-blue-50 text-blue-600 rounded text-sm hover:bg-blue-100 transition-colors">
                         Edit
                       </button>
                     </Link>
                     <button
-                      onClick={() => handleFoodDelete(food?._id?.$oid)}
+                      onClick={() => handleFoodDelete(food?.id)}
                       className="px-3 py-1 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors"
                     >
-                      Delete
+                      {isLoading ? "Deleting" : "Delete"}
                     </button>
                   </div>
                 </td>
@@ -136,7 +137,7 @@ export default function StoreList() {
           </button>
           <span className="h-8 w-8 flex items-center justify-center">...</span>
           <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-            {foodLists?.result?.meta?.totalPages}
+            {storeLists?.result?.meta?.totalPages}
           </button>
         </div>
 

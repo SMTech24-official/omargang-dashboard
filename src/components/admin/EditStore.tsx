@@ -1,12 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Upload } from "lucide-react";
 import Link from "next/link";
-import { useAddStoreMutation } from "@/lib/services/dashboardApi";
-import LocationPickerModal from "../mapSelector";
+import {
+  useStoreInfoQuery,
+  useUpdateStoreMutation,
+} from "@/lib/services/dashboardApi";
 import { toast, ToastContainer } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import LocationPickerModal from "../mapSelector";
 
 type FormDataType = {
   name: string;
@@ -17,13 +20,18 @@ type FormDataType = {
   longitude: string;
 };
 
-export default function AddStore() {
-  const router = useRouter();
-  const [addStoreFunc, { isLoading }] = useAddStoreMutation();
+export default function EditStore() {
+  const [showMap, setShowMap] = useState(false);
+  const params = useParams();
+  const storeId = params?.id as string;
+  const [updateStoreFunc, { isLoading }] = useUpdateStoreMutation();
+  const { data: foodInfo } = useStoreInfoQuery({ storeId });
+  console.log(foodInfo);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [showMap, setShowMap] = useState(false);
+
+  const router = useRouter();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -46,6 +54,22 @@ export default function AddStore() {
     longitude: "",
   });
 
+  useEffect(() => {
+    if (foodInfo?.result) {
+      const fetchData = foodInfo?.result;
+      setFormData({
+        name: fetchData?.name,
+        contactInfo: fetchData?.contactInfo,
+        location: fetchData?.location,
+        address: fetchData?.address,
+        latitude: fetchData?.location?.coordinates[1],
+        longitude: fetchData?.location?.coordinates[0],
+      });
+    }
+  }, [foodInfo?.result]);
+
+  console.log(formData);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -55,32 +79,29 @@ export default function AddStore() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!imageFile) {
-      alert("Please select an image.");
-      return;
-    }
+    console.log(imageFile);
 
     const form = new FormData();
     form.append("name", formData.name);
     form.append("contactInfo", formData.contactInfo);
     form.append("address", formData.address);
-    form.append("restaurantsImage", imageFile);
     form.append("location[type]", "Point");
     form.append("location[coordinates][]", formData.latitude);
     form.append("location[coordinates][]", formData.longitude);
+    imageFile && form.append("restaurantsImage", imageFile);
 
     try {
-      const response: any = await addStoreFunc(form);
+      const response: any = await updateStoreFunc({ storeId, form });
+      console.log(response);
       if (response.data) {
-        toast.success("Store added successfully!");
+        toast.success("Store Edit Successfully");
         router.push("/admin/store");
       } else {
         toast.error(response.error.message);
       }
     } catch (err) {
       console.error("Error:", err);
-      toast.error("Something went wrong");
+      alert("Something went wrong");
     }
   };
 
@@ -93,7 +114,7 @@ export default function AddStore() {
           className="flex items-center text-gray-600 hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
-          <span>Add Store</span>
+          <span>Edit Store</span>
         </Link>
       </div>
 
@@ -101,7 +122,7 @@ export default function AddStore() {
         {/* Upload Image */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Upload Image
+            Update Image
           </label>
 
           <div
@@ -110,7 +131,7 @@ export default function AddStore() {
           >
             {selectedImage ? (
               <img
-                src={selectedImage}
+                src={selectedImage || foodInfo?.result?.food?.image}
                 alt="Selected"
                 className="w-full h-40 object-contain mx-auto"
               />
@@ -149,7 +170,6 @@ export default function AddStore() {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
           />
         </div>
-
         <div>
           {/* Location Input */}
           <div>
@@ -163,7 +183,7 @@ export default function AddStore() {
               type="text"
               id="location"
               name="location"
-              value={formData.location}
+              value={formData.address}
               placeholder="Search or click to select"
               onFocus={() => setShowMap(true)}
               readOnly
@@ -187,8 +207,7 @@ export default function AddStore() {
             />
           )}
         </div>
-
-        {/* Contact Info */}
+        {/* contact info */}
         <div>
           <label
             htmlFor="contactInfo"
@@ -198,10 +217,10 @@ export default function AddStore() {
           </label>
           <input
             type="text"
+            placeholder="Enter Contact Number"
             id="contactInfo"
             name="contactInfo"
             value={formData.contactInfo}
-            placeholder="Enter Contact Number"
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
           />

@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
+    // baseUrl: "http://localhost:5002/api/v1",
     baseUrl: "https://api.barakadish.com/api/v1",
     prepareHeaders: (headers) => {
       const accessToken = Cookies?.get("accessToken");
@@ -25,5 +26,6 @@ export const baseApi = createApi({
     "topSelling",
     "foodLists",
     "bookings",
+    "storeLists",
   ],
 });
