@@ -1,15 +1,39 @@
 "use client";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useGetUsersQuery } from "@/lib/services/userApi";
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from "@/lib/services/userApi";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import Link from "next/link";
 
 export default function UserManagement() {
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const { data: users } = useGetUsersQuery({ page });
+  const [deleteUserFunc] = useDeleteUserMutation();
+
+  const handleDeleteUser = async (userId: string) => {
+    setDeletingUserId(userId);
+    try {
+      const response: any = await deleteUserFunc({ userId });
+      if (response.data) {
+        toast.success("User deleted successfully");
+      } else {
+        toast.error(response.error.message);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDeletingUserId(null);
+    }
+  };
 
   return (
     <div className="container mx-auto p-6 min-h-screen">
+      <ToastContainer position="bottom-right" />
       <h1 className="text-2xl font-bold mb-6">User Management</h1>
 
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -65,11 +89,17 @@ export default function UserManagement() {
                   </td>
                   <td className="py-4 px-6">
                     <div className="flex space-x-2">
-                      <button className="px-3 py-1 bg-amber-50 text-amber-600 rounded text-xs hover:bg-amber-100 transition-colors">
-                        View User
-                      </button>
-                      <button className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs hover:bg-red-100 transition-colors">
-                        Delete User
+                      <Link href={`/admin/users/${user?.id}`}>
+                        <button className="px-3 py-1 bg-amber-50 text-amber-600 rounded text-xs hover:bg-amber-100 transition-colors">
+                          View User
+                        </button>
+                      </Link>
+
+                      <button
+                        onClick={() => handleDeleteUser(user?.id)}
+                        className="px-3 py-1 bg-red-50 text-red-600 rounded text-xs hover:bg-red-100 transition-colors"
+                      >
+                        {deletingUserId === user?.id ? "Deleting" : "Delete"}
                       </button>
                     </div>
                   </td>

@@ -27,6 +27,15 @@ const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
+    userUpdate: builder.mutation({
+      query: ({ userId, data }) => ({
+        url: `/users/${userId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["users"],
+    }),
+
     profileImageUpdate: builder.mutation({
       query: (formData: FormData) => ({
         url: "/auth/update-profile-image",
@@ -44,6 +53,14 @@ const userApi = baseApi.injectEndpoints({
       }),
     }),
 
+    deleteUser: builder.mutation({
+      query: ({ userId }) => ({
+        url: `/users/${userId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["users"],
+    }),
+
     otpVerification: builder.mutation({
       query: (data) => ({
         url: "/auth/admin-verification",
@@ -54,6 +71,11 @@ const userApi = baseApi.injectEndpoints({
 
     myProfile: builder.query({
       query: () => "/auth/profile",
+      providesTags: ["users"],
+    }),
+
+    userInfo: builder.query({
+      query: ({ userId }) => `/users/${userId}`,
       providesTags: ["users"],
     }),
 
@@ -73,4 +95,7 @@ export const {
   useGetUsersQuery,
   useChangePasswordMutation,
   useProfileImageUpdateMutation,
+  useDeleteUserMutation,
+  useUserInfoQuery,
+  useUserUpdateMutation,
 } = userApi;

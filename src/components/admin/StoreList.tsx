@@ -10,12 +10,13 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function StoreList() {
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const { data: storeLists } = useStoreListsQuery({ page });
-  console.log(storeLists);
-  const [deleteStoreFunc, { isLoading }] = useStoreDeleteMutation();
+  const [deleteStoreFunc] = useStoreDeleteMutation();
 
   const handleFoodDelete = async (storeId: string) => {
+    setDeletingUserId(storeId);
     try {
       const response: any = await deleteStoreFunc({ storeId });
       console.log(response);
@@ -26,11 +27,13 @@ export default function StoreList() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setDeletingUserId(null);
     }
   };
 
   return (
-    <div className="rounded-lg shadow-sm overflow-hidden min-h-screen">
+    <div className="rounded-lg shadow-sm overflow-hidden min-h-screen p-4">
       <ToastContainer position="bottom-right" />
       <div className="flex justify-between items-center p-6">
         <h2 className="text-xl font-semibold">Store List</h2>
@@ -98,7 +101,7 @@ export default function StoreList() {
                       onClick={() => handleFoodDelete(food?.id)}
                       className="px-3 py-1 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors"
                     >
-                      {isLoading ? "Deleting" : "Delete"}
+                      {deletingUserId === food?.id ? "Deleting" : "Delete"}
                     </button>
                   </div>
                 </td>

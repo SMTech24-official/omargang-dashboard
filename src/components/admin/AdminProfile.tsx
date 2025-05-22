@@ -91,13 +91,15 @@ const AdminProfile = () => {
           >
             Profile Photo
           </label>
-          <Image
-            alt="photo"
-            src={profileInfo?.result?.profileImage}
-            width={100}
-            height={100}
-            className="rounded-md"
-          />
+          <div className="h-30 w-30 rounded-md overflow-hidden bg-emerald-50">
+            <Image
+              src={profileInfo?.result?.userInfo?.avater ?? "/admin.png"}
+              alt="Profile"
+              width={70}
+              height={70}
+              className="object-contain h-full w-full"
+            />
+          </div>
           <div className="absolute bottom-[0px] left-18 bg-white p-1 cursor-pointer">
             <Pencil />
           </div>
