@@ -57,8 +57,8 @@ type FormDataType = {
 };
 
 type OptionType = {
+  value: string;
   label: string;
-  id: string;
 };
 
 const foodTypeOptions = Object.keys(FoodType).filter((key) =>
@@ -141,13 +141,12 @@ export default function AddFood() {
   };
 
   const { data: restaurantsData } = useStoreListsQuery({ page, limit });
-  console.log(restaurantsData);
 
   // Sample data for options
   const restaurantOptions: OptionType[] = useMemo(() => {
     return (
       restaurantsData?.result?.data?.map((store: any) => ({
-        id: store.id,
+        value: store.id,
         label: store.name,
       })) || []
     );
@@ -310,12 +309,12 @@ export default function AddFood() {
             isMulti
             options={restaurantOptions}
             value={restaurantOptions.filter((opt) =>
-              formData.restaurantsIds.includes(opt?.id)
+              formData.restaurantsIds.includes(opt?.value)
             )}
             onChange={(selectedOptions: MultiValue<OptionType>) => {
               setFormData((prev) => ({
                 ...prev,
-                restaurantsIds: selectedOptions.map((opt) => opt.id),
+                restaurantsIds: selectedOptions.map((opt) => opt.value),
               }));
             }}
             placeholder="Search or select restaurants..."
