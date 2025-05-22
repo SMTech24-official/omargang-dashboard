@@ -3,10 +3,10 @@ import { baseApi } from "./baseApi";
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createUser: builder.mutation({
-      query: (data) => ({
-        url: "/users/create",
+      query: (profileData) => ({
+        url: "/users/create-shop-owner",
         method: "POST",
-        body: data,
+        body: profileData,
       }),
     }),
 

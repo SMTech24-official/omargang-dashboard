@@ -34,9 +34,17 @@ export default function UserManagement() {
   return (
     <div className="container mx-auto p-6 min-h-screen">
       <ToastContainer position="bottom-right" />
-      <h1 className="text-2xl font-bold mb-6">User Management</h1>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">User Management</h2>
+        <Link
+          href="/admin/users/add-user"
+          className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-md transition-colors"
+        >
+          Add Shop Owner
+        </Link>
+      </div>
 
-      <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg shadow-sm overflow-hidden mt-4">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
