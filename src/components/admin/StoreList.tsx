@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 export default function StoreList() {
   const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
-  const { data: storeLists } = useStoreListsQuery({ page });
+  const { data: storeLists } = useStoreListsQuery({ page, });
   const [deleteStoreFunc] = useStoreDeleteMutation();
 
   const handleFoodDelete = async (storeId: string) => {

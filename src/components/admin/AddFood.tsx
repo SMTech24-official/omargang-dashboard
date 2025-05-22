@@ -1,9 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ArrowLeft, ChevronDown, Upload } from "lucide-react";
 import Link from "next/link";
-import { useAddFoodMutation } from "@/lib/services/dashboardApi";
+import {
+  useAddFoodMutation,
+  useStoreListsQuery,
+} from "@/lib/services/dashboardApi";
 import Select, { MultiValue } from "react-select";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -55,7 +58,7 @@ type FormDataType = {
 
 type OptionType = {
   label: string;
-  value: string;
+  id: string;
 };
 
 const foodTypeOptions = Object.keys(FoodType).filter((key) =>
@@ -69,6 +72,8 @@ export default function AddFood() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [limit, setLimit] = useState(40);
+  const [page, setPage] = useState(1);
 
   const router = useRouter();
 
@@ -123,7 +128,6 @@ export default function AddFood() {
 
     try {
       const response: any = await addFoodFunc(form);
-      console.log(response);
       if (response.data) {
         toast.success("Food Added Successfully");
         router.push("/admin/food");
@@ -136,11 +140,18 @@ export default function AddFood() {
     }
   };
 
+  const { data: restaurantsData } = useStoreListsQuery({ page, limit });
+  console.log(restaurantsData);
+
   // Sample data for options
-  const restaurantOptions: OptionType[] = [
-    { value: "682a9d228c2f2e167df5a6b7", label: "KFC" },
-    { value: "682a9d228c2f2e167df5a6b8", label: "KFC2" },
-  ];
+  const restaurantOptions: OptionType[] = useMemo(() => {
+    return (
+      restaurantsData?.result?.data?.map((store: any) => ({
+        id: store.id,
+        label: store.name,
+      })) || []
+    );
+  }, [restaurantsData]);
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-gray-50 min-h-screen">
@@ -299,12 +310,12 @@ export default function AddFood() {
             isMulti
             options={restaurantOptions}
             value={restaurantOptions.filter((opt) =>
-              formData.restaurantsIds.includes(opt?.value)
+              formData.restaurantsIds.includes(opt?.id)
             )}
             onChange={(selectedOptions: MultiValue<OptionType>) => {
               setFormData((prev) => ({
                 ...prev,
-                restaurantsIds: selectedOptions.map((opt) => opt.value),
+                restaurantsIds: selectedOptions.map((opt) => opt.id),
               }));
             }}
             placeholder="Search or select restaurants..."

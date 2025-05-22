@@ -29,7 +29,8 @@ const dashboardApi = baseApi.injectEndpoints({
     }),
 
     storeLists: builder.query({
-      query: ({ page }) => `/restaurants?limit=10&page=${page}`,
+      query: ({ page = 1, limit = 10 }) =>
+        `/restaurants?limit=${limit}&page=${page}`,
       providesTags: ["storeLists"],
     }),
 
