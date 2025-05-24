@@ -97,7 +97,8 @@ const dashboardApi = baseApi.injectEndpoints({
     }),
 
     orderList: builder.query({
-      query: ({ page }) => `/booking/admin?limit=10&page=${page}`,
+      query: ({ page, status }) =>
+        `/booking/admin?limit=10&page=${page}&status=${status}`,
       providesTags: ["bookings"],
     }),
 

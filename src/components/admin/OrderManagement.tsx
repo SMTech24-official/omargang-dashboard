@@ -8,9 +8,14 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function OrderManagement() {
+  const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
-  const { data: orders } = useOrderListQuery({ page });
+  const { data: orders } = useOrderListQuery({ page, status });
   const [orderUpdate, { isLoading }] = useOrderStatusUpdateMutation();
+
+  const handleFilter = async (value: string) => {
+    setStatus(value);
+  };
 
   return (
     <div className="container mx-auto p-6  bg-gray-50 min-h-screen">
@@ -19,7 +24,16 @@ export default function OrderManagement() {
         <h1 className="text-2xl font-bold">Order Management</h1>
         <div className="flex items-center gap-1">
           <p>Filter by:</p>
-          <select className="text-black-800 border p-1 rounded-md outline-none">
+          <select
+            onChange={(e) => handleFilter(e.target.value)}
+            className="text-black-800 border p-1 rounded-md outline-none"
+          >
+            <option
+              value=""
+              className="px-3 py-1  text-green-800 rounded-full text-xs"
+            >
+              Select Status
+            </option>
             <option
               value="ORDER_SCHEDULED"
               className="px-3 py-1  text-green-800 rounded-full text-xs"
@@ -80,8 +94,14 @@ export default function OrderManagement() {
                 <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
                   Restaurant
                 </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Created At
+                </th>
+                <th className="text-left py-3 px-6 text-sm font-medium text-gray-500">
+                  Updated At
+                </th>
                 <th className="text-center py-3 px-6 text-sm font-medium text-gray-500">
-                  Action
+                  Status
                 </th>
               </tr>
             </thead>
@@ -94,6 +114,17 @@ export default function OrderManagement() {
                   <td className="py-4 px-6 text-sm font-medium">{order?.id}</td>
                   <td className="py-4 px-6 text-sm">{order?.user?.username}</td>
                   <td className="py-4 px-6 text-sm">{order?.address}</td>
+                  <td className="py-4 px-6 text-sm">
+                    {order?.createdAt
+                      ? new Date(order.createdAt).toLocaleString()
+                      : ""}
+                  </td>
+                  <td className="py-4 px-6 text-sm">
+                    {order?.updatedAt
+                      ? new Date(order.updatedAt).toLocaleString()
+                      : ""}
+                  </td>
+
                   <td className="py-4 grid justify-center">
                     <select
                       defaultValue={order?.status}
