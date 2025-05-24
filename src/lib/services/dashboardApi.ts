@@ -108,6 +108,12 @@ const dashboardApi = baseApi.injectEndpoints({
       providesTags: ["reviews"],
     }),
 
+    chatLists: builder.query({
+      query: ({ page, chatroomId }) =>
+        `/chat/get-single-message/${chatroomId}?limit=20&page=${page}`,
+      providesTags: ["messages"],
+    }),
+
     reviewStatusUpdate: builder.mutation({
       query: ({ rattingId, data }) => ({
         url: `/admin/update-review-status?rattingId=${rattingId}&status=${data.status}`,
@@ -147,4 +153,5 @@ export const {
   useUpdateStoreMutation,
   useReviewListQuery,
   useReviewStatusUpdateMutation,
+  useChatListsQuery
 } = dashboardApi;

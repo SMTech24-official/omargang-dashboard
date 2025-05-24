@@ -3,21 +3,28 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import Cookies from "js-cookie";
 import useWebSocket from "@/hooks/useWebSocket";
+import { useChatListsQuery } from "@/lib/services/dashboardApi";
 
 export default function MessagePage() {
-  const base_Url = "https://api.barakadish.com";
+  // const base_Url = "https://api.barakadish.com";
 
   const [conversations, setConversations] = useState<any[]>([]);
   const [activeConversation, setActiveConversation] = useState<any | null>(
     null
   );
+  console.log(conversations);
   const [messages, setMessages] = useState<Map<string, any[]>>(new Map());
   const [newMessage, setNewMessage] = useState("");
   const [chatroomId, setChatroomId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
   const token = useMemo(() => Cookies.get("accessToken") || null, []);
   const receiverId = activeConversation?.participants?.userId;
+
+  // const [page, setPage] = useState(1);
+  // const { data: allMessages } = useChatListsQuery({
+  //   page,
+  //   chatroomId,
+  // });
 
   const handleIncomingMessage = useCallback((data: any) => {
     switch (data.type) {
@@ -28,19 +35,41 @@ export default function MessagePage() {
         break;
       case "receivePrivateMessage": {
         const senderId = data.senderId;
+        const newMsg = { id: Date.now(), sender: "other", text: data.content };
+
         setMessages((prev) => {
           const updated = new Map(prev);
           const existing = updated.get(senderId) || [];
-          updated.set(senderId, [
-            ...existing,
-            { id: Date.now(), sender: "other", text: data.content },
-          ]);
+          updated.set(senderId, [...existing, newMsg]);
+          return updated;
+        });
+
+        setConversations((prev) => {
+          const updated = prev.map((conv) => {
+            if (conv.participants?.userId === senderId) {
+              return {
+                ...conv,
+                lastMessage: data.content,
+                unseen: (conv.unseen || 0) + 1,
+              };
+            }
+            return conv;
+          });
           return updated;
         });
         break;
       }
+
       case "conversationList":
-        setConversations(data?.conversationList?.result || []);
+        console.log(
+          "Received conversationList:",
+          data?.conversationList?.conversationList?.result?.length
+        );
+        if (data?.conversationList?.conversationList?.length) {
+          setConversations(data?.conversationList?.conversationList?.result);
+        } else {
+          console.warn("Ignoring empty conversationList message");
+        }
         break;
       default:
         console.warn("Unknown message type:", data);
@@ -85,16 +114,25 @@ export default function MessagePage() {
       return updated;
     });
 
+    // // Optionally update conversations optimistically (you can remove this if you want server to control)
+    setConversations((prev) => {
+      return prev.map((conv) => {
+        if (conv.conversationId === activeConversation?.conversationId) {
+          return {
+            ...conv,
+            lastMessage: newMessage,
+            unseen: 0,
+          };
+        }
+        return conv;
+      });
+    });
+
     // Send private message via WebSocket
     sendToSocket?.({
       type: "sendPrivateMessage",
       receiverId,
       content: newMessage,
-    });
-
-    // Request updated conversation list immediately after sending a message
-    sendToSocket?.({
-      type: "conversationList",
     });
 
     // Clear input box
@@ -117,7 +155,7 @@ export default function MessagePage() {
               onClick={() =>
                 sendToSocket?.({
                   type: "joinPrivateChat",
-                  user2Id: "67de4b5db3d0bda15b780ca4",
+                  user2Id: "6831888e9f3efd9b338f8cc0",
                 })
               }
               className="text-sm bg-green-500 text-white px-3 py-1 rounded-md shadow hover:bg-green-600 transition"
