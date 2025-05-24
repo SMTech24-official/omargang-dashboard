@@ -12,7 +12,6 @@ export default function MessagePage() {
   const [activeConversation, setActiveConversation] = useState<any | null>(
     null
   );
-  console.log(conversations);
   const [messages, setMessages] = useState<Map<string, any[]>>(new Map());
   const [newMessage, setNewMessage] = useState("");
   const [chatroomId, setChatroomId] = useState<string | null>(null);
@@ -61,16 +60,17 @@ export default function MessagePage() {
       }
 
       case "conversationList":
-        console.log(
-          "Received conversationList:",
-          data?.conversationList?.conversationList?.result?.length
-        );
-        if (data?.conversationList?.conversationList?.length) {
-          setConversations(data?.conversationList?.conversationList?.result);
+        console.log("Raw data from socket:", data);
+
+        const result = data?.conversationList?.result || [];
+
+        if (result.length) {
+          setConversations(result);
         } else {
-          console.warn("Ignoring empty conversationList message");
+          console.warn("Received empty or invalid conversation list");
         }
         break;
+
       default:
         console.warn("Unknown message type:", data);
     }
@@ -81,11 +81,14 @@ export default function MessagePage() {
     handleIncomingMessage
   );
 
-  // Initial join
   useEffect(() => {
     if (token && sendToSocket) {
-      sendToSocket({ type: "joinApp" });
-      sendToSocket({ type: "conversationList" });
+      const timeout = setTimeout(() => {
+        sendToSocket({ type: "joinApp" });
+        sendToSocket({ type: "conversationList" });
+      }, 500); // delay to ensure WebSocket is ready
+
+      return () => clearTimeout(timeout);
     }
   }, [token, sendToSocket]);
 
