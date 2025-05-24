@@ -22,7 +22,7 @@ export default function UserManagement() {
       if (response.data) {
         toast.success("User deleted successfully");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (error) {
       console.log(error);

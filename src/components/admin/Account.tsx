@@ -25,7 +25,7 @@ export default function AccountPage() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [changePasswordFunc, { isLoading }] = useChangePasswordMutation();
+  const [changePasswordFunc] = useChangePasswordMutation();
 
   const onSubmit = async (data: FormData) => {
     const submitData = {
@@ -37,7 +37,7 @@ export default function AccountPage() {
       if (response.data) {
         toast.success("Password has been changed successfully");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (error) {
       console.log(error);

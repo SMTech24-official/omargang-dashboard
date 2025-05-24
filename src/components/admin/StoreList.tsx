@@ -19,11 +19,10 @@ export default function StoreList() {
     setDeletingUserId(storeId);
     try {
       const response: any = await deleteStoreFunc({ storeId });
-      console.log(response);
       if (response.data) {
         toast.success("Store Deleted Successfully");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (error) {
       console.log(error);

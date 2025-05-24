@@ -13,18 +13,16 @@ export default function FoodList() {
   const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const { data: foodLists } = useFoodListsQuery({ page });
-  console.log(foodLists);
   const [deleteFoodFunc] = useFoodDeleteMutation();
 
   const handleFoodDelete = async (foodId: string) => {
     setDeletingUserId(foodId);
     try {
       const response: any = await deleteFoodFunc({ foodId });
-      console.log(response);
       if (response.data) {
         toast.success("Food Deleted Successfully");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (error) {
       console.log(error);

@@ -28,10 +28,7 @@ const SideMainBar = () => {
 
   return (
     <div className={`${pathName == "/privacy-policy" ? "hidden" : "block"}`}>
-      <SideNav
-        isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-      ></SideNav>
+      <SideNav></SideNav>
     </div>
   );
 };

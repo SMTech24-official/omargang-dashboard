@@ -158,17 +158,12 @@ import {
 import { BiFoodMenu } from "react-icons/bi";
 import { cn } from "@/lib/utils";
 
-interface SidebarProps {
-  isOpen: boolean;
-  toggleSidebar: () => void;
-}
-
 interface JwtPayload {
   role: "ADMIN" | "SHOP_OWNER";
   [key: string]: any;
 }
 
-export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
+export default function SideNav() {
   const pathname = usePathname();
   const router = useRouter();
   const [role, setRole] = useState<string | null>(null);

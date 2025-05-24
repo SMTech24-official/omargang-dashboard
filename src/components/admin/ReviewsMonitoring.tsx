@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import {
   useOrderStatusUpdateMutation,
   useReviewListQuery,
@@ -32,6 +32,7 @@ export default function ReviewsMonitoring() {
 
   return (
     <div className="container mx-auto p-6  bg-gray-50 min-h-screen">
+      <ToastContainer position="bottom-right" />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Reviews Monitoring</h1>
         <div className="flex items-center gap-1">
@@ -132,12 +133,16 @@ export default function ReviewsMonitoring() {
                         const selectedStatus = e.target.value;
 
                         try {
-                          await reviewUpdate({
+                          const response: any = await reviewUpdate({
                             bookingId: review?.id,
                             data: { status: selectedStatus },
                           });
 
-                          toast.success("Review status updated!");
+                          if (response.data) {
+                            toast.success("Review status updated!");
+                          } else {
+                            toast.error(response.error.data.message);
+                          }
                         } catch (error) {
                           toast.error("Failed to update review status.");
                           console.error("Status update error:", error);

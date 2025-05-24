@@ -45,7 +45,7 @@ export default function Profile() {
       if (response.data) {
         toast.success("Profile Update Successfully");
       } else {
-        toast.error(response?.error?.message);
+        toast.error(response?.error?.data.message);
       }
     } catch (error) {
       console.log(error);
@@ -64,7 +64,7 @@ export default function Profile() {
       if ("data" in response) {
         toast.success("Profile image updated successfully!");
       } else {
-        toast.error(response?.error?.message || "Image update failed.");
+        toast.error(response?.error?.data.message || "Image update failed.");
       }
     } catch (error) {
       toast.error("Something went wrong while updating image.");

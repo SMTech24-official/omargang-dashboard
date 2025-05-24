@@ -28,7 +28,7 @@ const AddUserPage = () => {
       if (response.data) {
         toast.success("User Created Successfully");
       } else {
-        toast.error(response?.error?.message);
+        toast.error(response.error.data.message);
       }
     } catch (error) {
       console.log(error);

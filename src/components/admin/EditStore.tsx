@@ -26,7 +26,6 @@ export default function EditStore() {
   const storeId = params?.id as string;
   const [updateStoreFunc, { isLoading }] = useUpdateStoreMutation();
   const { data: foodInfo } = useStoreInfoQuery({ storeId });
-  console.log(foodInfo);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -97,11 +96,11 @@ export default function EditStore() {
         toast.success("Store Edit Successfully");
         router.push("/admin/store");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (err) {
       console.error("Error:", err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 

@@ -76,7 +76,7 @@ export default function AddStore() {
         toast.success("Store added successfully!");
         router.push("/admin/store");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (err) {
       console.error("Error:", err);

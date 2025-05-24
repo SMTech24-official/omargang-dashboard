@@ -72,7 +72,6 @@ export default function EditFood() {
   const foodId = params?.id as string;
   const [updateFoodFunc, { isLoading }] = useUpdateFoodMutation();
   const { data: foodInfo } = useFoodInfoQuery({ foodId });
-  console.log(foodInfo);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -148,11 +147,11 @@ export default function EditFood() {
         toast.success("Food Added Successfully");
         router.push("/admin/food");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (err) {
       console.error("Error:", err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 

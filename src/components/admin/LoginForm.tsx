@@ -34,7 +34,6 @@ const LoginForm = () => {
     postLogin(data)
       .unwrap()
       .then((payload) => {
-        console.log(payload, "check payloads");
         router.push("/admin/dashboard");
         Cookies.set("accessToken", payload?.result?.accessToken);
       })

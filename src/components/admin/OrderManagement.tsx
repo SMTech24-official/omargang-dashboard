@@ -133,12 +133,16 @@ export default function OrderManagement() {
                         const selectedStatus = e.target.value;
 
                         try {
-                          await orderUpdate({
+                          const response: any = await orderUpdate({
                             bookingId: order?.id,
                             data: { status: selectedStatus },
                           });
 
-                          toast.success("Order status updated!");
+                          if (response.data) {
+                            toast.success("Order status updated!");
+                          } else {
+                            toast.error(response.error.data.message);
+                          }
                         } catch (error) {
                           toast.error("Failed to update order status.");
                           console.error("Status update error:", error);

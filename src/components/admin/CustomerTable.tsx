@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { EyeIcon, PencilIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, TrashIcon } from "lucide-react";
 
 const customersData = [
   {

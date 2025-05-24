@@ -132,7 +132,7 @@ export default function AddFood() {
         toast.success("Food Added Successfully");
         router.push("/admin/food");
       } else {
-        toast.error(response.error.message);
+        toast.error(response.error.data.message);
       }
     } catch (err) {
       console.error("Error:", err);
