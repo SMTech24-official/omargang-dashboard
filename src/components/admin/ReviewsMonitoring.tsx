@@ -1,34 +1,44 @@
 "use client";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, StarHalf } from "lucide-react";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import {
-  useOrderStatusUpdateMutation,
   useReviewListQuery,
   useReviewStatusUpdateMutation,
 } from "@/lib/services/dashboardApi";
-
-// Sample review data
-const reviews = Array.from({ length: 11 }, (_, i) => ({
-  id: i + 1,
-  user: "John Doe",
-  restaurant: "Spice Avenue",
-  rating: 4.9,
-  date: "10-03-2025",
-  userImage: "/placeholder.svg?height=40&width=40",
-  status: "PENDING",
-}));
+import { GrStarOutline } from "react-icons/gr";
 
 export default function ReviewsMonitoring() {
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
-  const { data: orders } = useReviewListQuery({ page, status });
+  const { data: reviews } = useReviewListQuery({ page, status });
+  console.log(reviews);
   const handleFilter = async (value: string) => {
     setStatus(value);
   };
 
   const [reviewUpdate, { isLoading }] = useReviewStatusUpdateMutation();
+
+  const renderStars = (rating: number) => {
+    const stars = [];
+
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(
+          <Star key={i} className="h-4 w-4 text-amber-400 fill-current" />
+        );
+      } else if (rating >= i - 0.5) {
+        stars.push(
+          <StarHalf key={i} className="h-4 w-4 text-amber-400 fill-current" />
+        );
+      } else {
+        stars.push(<GrStarOutline key={i} className="h-4 w-4 text-gray-300" />);
+      }
+    }
+
+    return stars;
+  };
 
   return (
     <div className="container mx-auto p-6  bg-gray-50 min-h-screen">
@@ -54,10 +64,10 @@ export default function ReviewsMonitoring() {
               Pending
             </option>
             <option
-              value="APPROVED"
+              value="APPROVE"
               className="px-3 py-1  text-green-800 rounded-full text-xs"
             >
-              Approved
+              Approve
             </option>
             <option
               value="HIDE"
@@ -92,7 +102,7 @@ export default function ReviewsMonitoring() {
               </tr>
             </thead>
             <tbody>
-              {reviews.map((review) => (
+              {reviews?.result?.reviews?.data.map((review: any) => (
                 <tr
                   key={review.id}
                   className="border-b border-gray-200 last:border-0"
@@ -101,40 +111,45 @@ export default function ReviewsMonitoring() {
                     <div className="flex items-center">
                       <div className="h-10 w-10 rounded-full overflow-hidden mr-3 bg-gray-100">
                         <Image
-                          src={review.userImage || "/placeholder.svg"}
-                          alt={review.user}
+                          src={review?.user?.avater || "/placeholder.svg"}
+                          alt={review.user?.username}
                           width={40}
                           height={40}
                           className="object-cover"
                         />
                       </div>
-                      <span className="font-medium">{review.user}</span>
+                      <span className="font-medium">
+                        {review.user?.username}
+                      </span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-sm">{review.restaurant}</td>
+                  <td className="py-4 px-6 text-sm">
+                    {review?.food?.restaurantFood[0]?.restaurant?.name ??
+                      "no available"}
+                  </td>
                   <td className="py-4 px-6">
                     <div className="flex items-center">
-                      <div className="flex text-amber-400 mr-1">
-                        <Star className="h-4 w-4 fill-current" />
-                        <Star className="h-4 w-4 fill-current" />
-                        <Star className="h-4 w-4 fill-current" />
-                        <Star className="h-4 w-4 fill-current" />
-                        <Star className="h-4 w-4 fill-current" />
+                      <div className="flex mr-1">
+                        {renderStars(review?.ratingValue || 0)}
                       </div>
-                      <span className="text-sm">{review.rating}</span>
+                      <span className="text-sm">{review?.ratingValue}</span>
                     </div>
                   </td>
-                  <td className="py-4 px-6 text-sm">{review.date}</td>
+                  <td className="py-4 px-6 text-sm">
+                    {review?.createdAt
+                      ? new Date(review?.createdAt).toLocaleString()
+                      : ""}
+                  </td>
                   <td className="py-4 grid justify-center">
                     <select
-                      defaultValue={review?.status}
+                      defaultValue={review?.reviewStatus}
                       className="text-black-800 border p-1 rounded-md outline-none"
                       onChange={async (e) => {
                         const selectedStatus = e.target.value;
 
                         try {
                           const response: any = await reviewUpdate({
-                            bookingId: review?.id,
+                            rattingId: review?.id,
                             data: { status: selectedStatus },
                           });
 
@@ -157,10 +172,10 @@ export default function ReviewsMonitoring() {
                         Pending
                       </option>
                       <option
-                        value="APPROVED"
+                        value="APPROVE"
                         className="px-3 py-1  text-green-800 rounded-full text-xs"
                       >
-                        Approved
+                        Approve
                       </option>
                       <option
                         value="HIDE"
@@ -207,7 +222,7 @@ export default function ReviewsMonitoring() {
               ...
             </span>
             <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-              {orders?.result?.meta?.totalPages}
+              {reviews?.result?.meta?.totalPages}
             </button>
           </div>
 
