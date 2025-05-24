@@ -31,9 +31,10 @@ export async function middleware(req: Request) {
       if (
         pathname.startsWith("/admin/dashboard") ||
         pathname.startsWith("/admin/users") ||
-        pathname.startsWith("/admin/reviews")
+        pathname.startsWith("/admin/reviews") ||
+        pathname.startsWith("/admin/store")
       ) {
-        return NextResponse.redirect(new URL("/admin/store", req.url));
+        return NextResponse.redirect(new URL("/admin/food", req.url));
       }
 
       return NextResponse.next(); // ✅ Allow other /admin routes

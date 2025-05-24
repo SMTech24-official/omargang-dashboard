@@ -216,7 +216,8 @@ export default function SideNav() {
           (item) =>
             item.id !== "dashboard" &&
             item.id !== "users" &&
-            item.id !== "reviews"
+            item.id !== "reviews" &&
+            item.id !== "stores"
         )
       : allMenuItems;
 
