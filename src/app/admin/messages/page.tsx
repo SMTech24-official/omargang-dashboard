@@ -37,10 +37,10 @@ export default function MessagePage() {
   }, [messages]);
 
   return (
-    <div className="h-[calc(100vh-80px)] p-6 bg-gray-100">
+    <div className="h-[calc(100vh-80px)] p-6">
       <div className="flex h-full max-w-6xl mx-auto rounded-3xl shadow-2xl overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-1/3 bg-white overflow-y-auto shadow-md rounded-l-3xl">
+        <aside className="w-1/3 bg-white overflow-y-auto shadow-md rounded-l-2xl">
           <div className="p-5 py-7 text-xl font-bold text-gray-700 border-b border-gray-100">
             Conversations
           </div>

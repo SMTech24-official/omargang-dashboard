@@ -12,7 +12,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="sticky top-0 z-10 bg-white px-4 py-2 shadow-md rounded-md">
           <Header />
         </div>
-        <main className="bg-gray-50">{children}</main>
+        <main className="bg-gray-50 rounded-md">{children}</main>
       </div>
     </div>
   );
