@@ -102,6 +102,21 @@ const dashboardApi = baseApi.injectEndpoints({
       providesTags: ["bookings"],
     }),
 
+    reviewList: builder.query({
+      query: ({ page, status }) =>
+        `/booking/admin?limit=10&page=${page}&status=${status}`,
+      providesTags: ["reviews"],
+    }),
+
+    reviewStatusUpdate: builder.mutation({
+      query: ({ bookingId, data }) => ({
+        url: `/booking/update-booking-status/${bookingId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["reviews"],
+    }),
+
     orderStatusUpdate: builder.mutation({
       query: ({ bookingId, data }) => ({
         url: `/booking/update-booking-status/${bookingId}`,
@@ -130,4 +145,6 @@ export const {
   useStoreDeleteMutation,
   useStoreInfoQuery,
   useUpdateStoreMutation,
+  useReviewListQuery,
+  useReviewStatusUpdateMutation
 } = dashboardApi;

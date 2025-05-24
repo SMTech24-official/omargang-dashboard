@@ -3,7 +3,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useOrderStatusUpdateMutation } from "@/lib/services/dashboardApi";
+import {
+  useOrderStatusUpdateMutation,
+  useReviewListQuery,
+  useReviewStatusUpdateMutation,
+} from "@/lib/services/dashboardApi";
 
 // Sample review data
 const reviews = Array.from({ length: 11 }, (_, i) => ({
@@ -18,11 +22,13 @@ const reviews = Array.from({ length: 11 }, (_, i) => ({
 
 export default function ReviewsMonitoring() {
   const [status, setStatus] = useState("");
+  const [page, setPage] = useState(1);
+  const { data: orders } = useReviewListQuery({ page, status });
   const handleFilter = async (value: string) => {
     setStatus(value);
   };
 
-  const [orderUpdate, { isLoading }] = useOrderStatusUpdateMutation();
+  const [reviewUpdate, { isLoading }] = useReviewStatusUpdateMutation();
 
   return (
     <div className="container mx-auto p-6  bg-gray-50 min-h-screen">
@@ -126,7 +132,7 @@ export default function ReviewsMonitoring() {
                         const selectedStatus = e.target.value;
 
                         try {
-                          await orderUpdate({
+                          await reviewUpdate({
                             bookingId: review?.id,
                             data: { status: selectedStatus },
                           });
@@ -166,32 +172,46 @@ export default function ReviewsMonitoring() {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-end items-center px-6 py-4 border-t border-gray-200">
-          <div className="flex items-center space-x-1">
-            <button className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
-              <ChevronLeft className="h-5 w-5" />
-            </button>
+        <div className="flex justify-end items-center px-6 py-4 border-t border-gray-200 gap-4">
+          <button
+            onClick={() => setPage(page - 1)}
+            className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
 
-            <button className="h-8 w-8 flex items-center justify-center rounded-full bg-emerald-500 text-white">
-              1
+          <div className="flex space-x-1">
+            <button
+              className={`h-8 w-8 flex items-center justify-center rounded-full bg-emerald-500 text-white`}
+            >
+              {page}
             </button>
-            <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-              2
+            <button
+              onClick={() => setPage(page + 1)}
+              className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+            >
+              {page + 1}
             </button>
-            <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-              3
+            <button
+              onClick={() => setPage(page + 2)}
+              className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+            >
+              {page + 2}
             </button>
             <span className="h-8 w-8 flex items-center justify-center">
               ...
             </span>
             <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
-              440
-            </button>
-
-            <button className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">
-              <ChevronRight className="h-5 w-5" />
+              {orders?.result?.meta?.totalPages}
             </button>
           </div>
+
+          <button
+            onClick={() => setPage(page + 1)}
+            className="p-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
         </div>
       </div>
     </div>
