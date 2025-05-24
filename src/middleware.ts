@@ -30,7 +30,8 @@ export async function middleware(req: Request) {
       // ❌ Block these routes
       if (
         pathname.startsWith("/admin/dashboard") ||
-        pathname.startsWith("/admin/users")
+        pathname.startsWith("/admin/users") ||
+        pathname.startsWith("/admin/reviews")
       ) {
         return NextResponse.redirect(new URL("/admin/store", req.url));
       }

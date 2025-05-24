@@ -218,7 +218,10 @@ export default function SideNav({ isOpen, toggleSidebar }: SidebarProps) {
   const filteredMenuItems =
     role === "SHOP_OWNER"
       ? allMenuItems.filter(
-          (item) => item.id !== "dashboard" && item.id !== "users"
+          (item) =>
+            item.id !== "dashboard" &&
+            item.id !== "users" &&
+            item.id !== "reviews"
         )
       : allMenuItems;
 
